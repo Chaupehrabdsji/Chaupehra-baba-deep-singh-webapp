@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Media — Chaupehra Baba Deep Singh Ji</title>
+  <meta name="description" content="Watch live streams and browse photos from Chaupehra Baba Deep Singh Ji programs." />
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/media.css" />
+</head>
+<body>
+
+<div id="nav-placeholder"></div>
+
+<div class="page-title-band">
+  <div class="container">
+    <div class="page-title-bilingual">
+      <h1 class="page-title-primary" data-en="Media" data-pa="ਮੀਡੀਆ">Media</h1>
+      <p class="page-title-secondary gurmukhi" data-en="ਮੀਡੀਆ" data-pa="Media">ਮੀਡੀਆ</p>
+    </div>
+  </div>
+</div>
+
+<!-- Live Stream Section -->
+<section class="section" id="livestream">
+  <div class="container">
+    <h2 class="section-title" data-en="Live Stream" data-pa="ਲਾਈਵ ਸਟ੍ਰੀਮ">Live Stream</h2>
+    <p class="section-subtitle" data-en="Watch our latest programs live or replay recent broadcasts." data-pa="ਸਾਡੇ ਤਾਜ਼ੇ ਪ੍ਰੋਗਰਾਮ ਲਾਈਵ ਦੇਖੋ ਜਾਂ ਪੁਰਾਣੇ ਪ੍ਰਸਾਰਣ ਦੁਬਾਰਾ ਦੇਖੋ।">Watch our latest programs live or replay recent broadcasts.</p>
+
+    <!-- Main player -->
+    <div id="main-player-wrap" class="main-player-wrap">
+      <div class="main-player-loading">
+        <div class="spinner"></div>
+        <p data-en="Loading stream…" data-pa="ਸਟ੍ਰੀਮ ਲੋਡ ਹੋ ਰਹੀ ਹੈ…">Loading stream…</p>
+      </div>
+    </div>
+
+    <!-- Thumbnail row -->
+    <div class="stream-thumbs" id="stream-thumbs">
+      <!-- populated by JS -->
+    </div>
+
+    <!-- Subscribe CTA -->
+    <div class="yt-subscribe-wrap">
+      <a href="#" id="yt-channel-link" class="btn btn-secondary" target="_blank" rel="noopener" aria-label="Subscribe to our YouTube channel">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="var(--navy)"/></svg>
+        <span data-en="Subscribe on YouTube" data-pa="ਯੂਟਿਊਬ 'ਤੇ ਸਬਸਕ੍ਰਾਈਬ ਕਰੋ">Subscribe on YouTube</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Photo Gallery -->
+<section class="section section--mid" id="gallery">
+  <div class="container">
+    <h2 class="section-title" data-en="Photo Gallery" data-pa="ਫ਼ੋਟੋ ਗੈਲਰੀ">Photo Gallery</h2>
+
+    <div class="gallery-carousel-wrap" id="gallery-wrap">
+      <div class="gallery-loading">
+        <div class="spinner"></div>
+        <p data-en="Loading gallery…" data-pa="ਗੈਲਰੀ ਲੋਡ ਹੋ ਰਹੀ ਹੈ…">Loading gallery…</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+  import { SUPABASE_URL, SUPABASE_ANON, YOUTUBE_CHANNEL_ID, YOUTUBE_API_KEY } from './supabase-config.js';
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  /* ── YouTube Streams ── */
+  async function loadStreams() {
+    const mainWrap = document.getElementById('main-player-wrap');
+    const thumbsWrap = document.getElementById('stream-thumbs');
+    const ytLink = document.getElementById('yt-channel-link');
+
+    // Set channel link
+    const channelUrl = `https://www.youtube.com/channel/${YOUTUBE_CHANNEL_ID}`;
+    ytLink.href = channelUrl;
+
+    try {
+      const BASE = `https://www.googleapis.com/youtube/v3/search?key=${YOUTUBE_API_KEY}&channelId=${YOUTUBE_CHANNEL_ID}&part=snippet&type=video`;
+
+      // Fetch live stream and recent videos in parallel
+      const [liveRes, recentRes] = await Promise.all([
+        fetch(`${BASE}&eventType=live&maxResults=1`),
+        fetch(`${BASE}&order=date&maxResults=3`)
+      ]);
+
+      if (!liveRes.ok || !recentRes.ok) throw new Error('YouTube API error');
+      const [liveJson, recentJson] = await Promise.all([liveRes.json(), recentRes.json()]);
+
+      const liveVideos   = liveJson.items  || [];
+      const recentVideos = recentJson.items || [];
+
+      // Merge: live first, then recent (deduped)
+      const liveIds = new Set(liveVideos.map(v => v.id.videoId));
+      const merged  = [...liveVideos, ...recentVideos.filter(v => !liveIds.has(v.id.videoId))];
+      const videos  = merged.slice(0, 3);
+
+      if (!videos.length) {
+        mainWrap.innerHTML = `<p class="text-muted text-center" data-en="No streams found." data-pa="ਕੋਈ ਸਟ੍ਰੀਮ ਨਹੀਂ ਮਿਲੀ।">No streams found.</p>`;
+        return;
+      }
+
+      const [main, ...rest] = videos;
+      const isLive = main.snippet.liveBroadcastContent === 'live';
+      const mainId = main.id.videoId;
+
+      // Main embedded player
+      mainWrap.innerHTML = `
+        <div class="main-player-header">
+          ${isLive ? '<span class="badge badge-live">● LIVE</span>' : ''}
+          <h3 class="main-player-title">${main.snippet.title}</h3>
+        </div>
+        <div class="main-player-iframe-wrap">
+          <iframe
+            src="https://www.youtube.com/embed/${mainId}${isLive ? '?autoplay=0' : ''}"
+            title="${main.snippet.title}"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy">
+          </iframe>
+        </div>`;
+
+      // Thumbnail links for remaining 2
+      if (rest.length) {
+        thumbsWrap.innerHTML = rest.map(v => {
+          const thumb = v.snippet.thumbnails?.medium?.url || v.snippet.thumbnails?.default?.url;
+          const isVidLive = v.snippet.liveBroadcastContent === 'live';
+          const date = new Date(v.snippet.publishedAt).toLocaleDateString('en-CA', { day: 'numeric', month: 'long', year: 'numeric' });
+          return `
+            <a href="https://www.youtube.com/watch?v=${v.id.videoId}" class="stream-thumb" target="_blank" rel="noopener" aria-label="${v.snippet.title}">
+              <div class="stream-thumb-img-wrap">
+                <img src="${thumb}" alt="" loading="lazy" />
+                ${isVidLive ? '<span class="badge badge-live stream-thumb-live">● LIVE</span>' : ''}
+              </div>
+              <div class="stream-thumb-info">
+                <p class="stream-thumb-title">${v.snippet.title}</p>
+                <p class="stream-thumb-date text-muted">${date}</p>
+              </div>
+            </a>`;
+        }).join('');
+      }
+
+    } catch (err) {
+      mainWrap.innerHTML = `
+        <div class="streams-fallback">
+          <p class="text-muted" data-en="Live stream unavailable. Visit our YouTube channel directly." data-pa="ਲਾਈਵ ਸਟ੍ਰੀਮ ਉਪਲਬਧ ਨਹੀਂ। ਸਿੱਧਾ ਸਾਡੇ ਯੂਟਿਊਬ ਚੈਨਲ 'ਤੇ ਜਾਓ।">
+            Live stream unavailable. Visit our YouTube channel directly.
+          </p>
+          <a href="https://www.youtube.com/channel/${YOUTUBE_CHANNEL_ID}" class="btn btn-primary mt-6" target="_blank" rel="noopener">
+            Open YouTube Channel
+          </a>
+        </div>`;
+    }
+  }
+
+  /* ── Photo Gallery Carousel ── */
+  async function loadGallery() {
+    const wrap = document.getElementById('gallery-wrap');
+    try {
+      const { data: photos, error } = await sb
+        .from('photos')
+        .select('*')
+        .order('sort_order', { ascending: true });
+
+      if (error) throw error;
+      if (!photos || !photos.length) {
+        wrap.innerHTML = `<p class="text-muted text-center" data-en="No photos yet." data-pa="ਅਜੇ ਕੋਈ ਫ਼ੋਟੋ ਨਹੀਂ।">No photos yet.</p>`;
+        return;
+      }
+
+      const urls = photos.map(p => p.url || sb.storage.from('gallery').getPublicUrl(p.storage_path).data.publicUrl);
+
+      wrap.innerHTML = `
+        <div class="carousel" id="carousel" role="region" aria-label="Photo gallery" aria-roledescription="carousel">
+          <div class="carousel-track" id="carousel-track">
+            ${urls.map((url, i) => `
+              <div class="carousel-slide" role="group" aria-roledescription="slide" aria-label="Photo ${i+1} of ${urls.length}">
+                <img src="${url}" alt="Chaupehra program photo ${i+1}" loading="${i < 2 ? 'eager' : 'lazy'}" />
+              </div>`).join('')}
+          </div>
+          <button class="carousel-btn carousel-btn--prev" id="prev-btn" aria-label="Previous photo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="carousel-btn carousel-btn--next" id="next-btn" aria-label="Next photo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <div class="carousel-dots" id="carousel-dots" aria-hidden="true">
+            ${urls.map((_, i) => `<button class="carousel-dot ${i===0?'active':''}" data-idx="${i}" aria-label="Photo ${i+1}"></button>`).join('')}
+          </div>
+        </div>`;
+
+      initCarousel(urls.length);
+    } catch (err) {
+      wrap.innerHTML = `<p class="text-muted text-center" data-en="Unable to load gallery." data-pa="ਗੈਲਰੀ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ।">Unable to load gallery.</p>`;
+    }
+  }
+
+  function initCarousel(total) {
+    let current = 0;
+    let timer;
+    const track   = document.getElementById('carousel-track');
+    const dots    = document.querySelectorAll('.carousel-dot');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const carousel= document.getElementById('carousel');
+
+    const goTo = idx => {
+      current = (idx + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    };
+
+    const startAuto = () => {
+      clearInterval(timer);
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        timer = setInterval(() => goTo(current + 1), 4500);
+      }
+    };
+
+    prevBtn.addEventListener('click', () => { goTo(current - 1); startAuto(); });
+    nextBtn.addEventListener('click', () => { goTo(current + 1); startAuto(); });
+    dots.forEach(d => d.addEventListener('click', () => { goTo(+d.dataset.idx); startAuto(); }));
+
+    // Touch swipe
+    let touchX = 0;
+    carousel.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+    carousel.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 40) { goTo(current + (dx < 0 ? 1 : -1)); startAuto(); }
+    }, { passive: true });
+
+    // Pause on hover
+    carousel.addEventListener('mouseenter', () => clearInterval(timer));
+    carousel.addEventListener('mouseleave', startAuto);
+
+    startAuto();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    loadStreams();
+    loadGallery();
+  });
+</script>
+<script src="js/global.js"></script>
+</body>
+</html>

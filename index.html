@@ -1,394 +1,359 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chaupehra Baba Deep Singh Ji — Surrey, BC</title>
-  <meta name="description" content="Chaupehra Baba Deep Singh Ji — Sikh kirtan group based in Surrey, British Columbia. Kirtan, seva, and sangat programs across the Lower Mainland." />
-  <meta property="og:title" content="Chaupehra Baba Deep Singh Ji" />
-  <meta property="og:description" content="Sikh kirtan group based in Surrey, BC. Upcoming events, kirtan recordings, and community seva." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://chaupehrabdsji.vercel.app" />
-  <link rel="canonical" href="https://chaupehrabdsji.vercel.app" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☬</text></svg>" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://esm.sh; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://cdn.jsdelivr.net https://*.supabase.co https://ibzxdxervfmlupmftngw.supabase.co; frame-src https://www.youtube-nocookie.com https://www.google.com; form-action https://formspree.io https://*.supabase.co; connect-src 'self' https://*.supabase.co https://esm.sh; base-uri 'self'" />
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gurmukhi:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <meta name="description" content="Chaupehra Baba Deep Singh Ji — Sikh community organisation in Surrey, BC, Canada." />
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/home.css" />
 </head>
 <body>
 
-<!-- ── NAV ── -->
-<header class="nav-bar">
-  <div class="nav-inner">
-    <a href="#home" class="nav-logo">
-      <span class="khanda">☬</span>
-      <span class="nav-title" data-i18n="siteTitle">Chaupehra Baba Deep Singh Ji</span>
-    </a>
-    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">&#9776;</button>
-    <nav class="nav-links" id="navLinks" aria-label="Main">
-      <a href="#about"         data-i18n="navAbout">About</a>
-      <a href="#events"        data-i18n="navEvents">Events</a>
-      <a href="#media"         data-i18n="navMedia">Media</a>
-      <a href="#gallery"       data-i18n="navGallery">Gallery</a>
-      <a href="#resources"     data-i18n="navResources">Resources</a>
-      <a href="#news"          data-i18n="navNews">News</a>
-      <a href="#seva"          data-i18n="navSeva">Seva</a>
-      <a href="#bookings"      data-i18n="navBookings">Book Us</a>
-      <a href="#contact"       data-i18n="navContact">Contact</a>
-      <button class="btn-lang" id="langToggle">ਪੰਜਾਬੀ</button>
-      <button class="btn-theme" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
-    </nav>
-  </div>
-</header>
+<div id="nav-placeholder"></div>
 
-<main>
 <!-- ── HERO ── -->
-<section class="hero" id="home">
+<section class="hero" aria-label="Welcome">
+  <div class="hero-carousel" id="hero-carousel">
+    <div class="hero-carousel-track" id="hero-track">
+      <div class="hero-slide hero-slide--fallback active"></div>
+    </div>
+  </div>
   <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <div class="hero-khanda">☬</div>
-    <h1 data-i18n="heroTitle">Chaupehra Baba Deep Singh Ji</h1>
-    <p class="hero-sub" data-i18n="heroSub">Surrey, British Columbia · Kirtan · Seva · Sangat</p>
-    <a href="#events" class="btn-primary" data-i18n="heroBtn">Upcoming Events</a>
+  <div class="hero-content container">
+    <div class="hero-text">
+      <h1 class="hero-title">
+        <span class="hero-title-en" data-en="Chaupehra Baba Deep Singh Ji" data-pa="ਚੌਪਹਿਰਾ ਬਾਬਾ ਦੀਪ ਸਿੰਘ ਜੀ">Chaupehra Baba Deep Singh Ji</span>
+        
+        <span class="hero-title-pa gurmukhi" data-en="ਚੌਪਹਿਰਾ ਬਾਬਾ ਦੀਪ ਸਿੰਘ ਜੀ" data-pa="Chaupehra Baba Deep Singh Ji">ਚੌਪਹਿਰਾ ਬਾਬਾ ਦੀਪ ਸਿੰਘ ਜੀ</span>
+      </h1>
+      <p class="hero-tagline" data-en="Sikh community organisation · Surrey, BC, Canada" data-pa="ਸਿੱਖ ਭਾਈਚਾਰਕ ਸੰਸਥਾ · ਸਰੀ, ਬੀ.ਸੀ., ਕੈਨੇਡਾ">
+        Sikh community organisation · Surrey, BC, Canada
+      </p>
+      <div class="hero-ctas">
+        <a href="about.html" class="btn btn-primary" data-en="Learn More" data-pa="ਹੋਰ ਜਾਣੋ">Learn More</a>
+        <a href="media.html" class="btn btn-secondary" data-en="Watch Live" data-pa="ਲਾਈਵ ਦੇਖੋ">Watch Live</a>
+        <a href="#contact-home" class="btn btn-secondary" data-en="Contact Us" data-pa="ਸੰਪਰਕ ਕਰੋ">Contact Us</a>
+      </div>
+    </div>
+    <div class="hero-portrait" aria-hidden="true">
+      <img src="assets/baba-deep-singh.png" alt="" />
+    </div>
+  </div>
+  <div class="hero-dots" id="hero-dots" aria-hidden="true"></div>
+</section>
+
+<!-- ── LIKHAN BHAGTI BANNER ── -->
+<a href="likhanbhagti.html" class="lb-home-banner" aria-label="Learn more and sign up for Likhan Bhagti Samgam">
+  <div class="lb-home-banner-inner container">
+    <div class="lb-home-banner-text">
+      <span class="lb-home-banner-tag" data-en="New Event" data-pa="ਨਵਾਂ ਸਮਾਗਮ">New Event</span>
+      <p class="lb-home-banner-title" data-en="5th Annual Likhan Bhagti Samgam" data-pa="5ਵਾਂ ਸਾਲਾਨਾ ਲਿਖਣ ਭਗਤੀ ਸਮਾਗਮ">5th Annual Likhan Bhagti Samgam</p>
+      <p class="lb-home-banner-sub" data-en="Write WaheGuru's name with love · Award Ceremony: Sept 25, 2026 · Surrey, BC" data-pa="ਵਾਹਿਗੁਰੂ ਦਾ ਨਾਮ ਪਿਆਰ ਨਾਲ ਲਿਖੋ · ਇਨਾਮ ਸਮਾਰੋਹ: 25 ਸਤੰਬਰ 2026 · ਸਰੀ, ਬੀ.ਸੀ.">Write WaheGuru's name with love &nbsp;·&nbsp; Award Ceremony: Sept 25, 2026 &nbsp;·&nbsp; Surrey, BC</p>
+    </div>
+    <span class="lb-home-banner-btn" data-en="Learn More &amp; Sign Up" data-pa="ਹੋਰ ਜਾਣੋ ਅਤੇ ਰਜਿਸਟਰ ਕਰੋ">Learn More &amp; Sign Up →</span>
+  </div>
+</a>
+
+<!-- ── ABOUT SNIPPET ── -->
+<section class="section section--mid home-about">
+  <div class="container">
+    <h2 class="section-title" data-en="Who Was He?" data-pa="ਉਹ ਕੌਣ ਸਨ?">Who Was He?</h2>
+    <p class="home-about-text" data-en="Born in 1682, Baba Deep Singh Ji spent his life as a student of the Guru, a scribe of scripture, and a warrior for the defenseless. At 75, he marched against a 20,000-strong army to reclaim Harmandir Sahib — fulfilling a vow that his head would fall at the Golden Temple. He kept it." data-pa="1682 ਵਿੱਚ ਜਨਮੇ, ਬਾਬਾ ਦੀਪ ਸਿੰਘ ਜੀ ਨੇ ਆਪਣੀ ਜ਼ਿੰਦਗੀ ਗੁਰੂ ਦੇ ਵਿਦਿਆਰਥੀ, ਗ੍ਰੰਥ ਦੇ ਲਿਖਾਰੀ ਅਤੇ ਕਮਜ਼ੋਰਾਂ ਦੇ ਯੋਧੇ ਵਜੋਂ ਬਿਤਾਈ। 75 ਸਾਲ ਦੀ ਉਮਰ ਵਿੱਚ, ਉਨ੍ਹਾਂ ਨੇ ਹਰਿਮੰਦਰ ਸਾਹਿਬ ਲਈ ਸ਼ਹਾਦਤ ਦਿੱਤੀ।">
+      Born in 1682, Baba Deep Singh Ji spent his life as a student of the Guru, a scribe of scripture, and a warrior for the defenseless. At 75, he marched against a 20,000-strong army to reclaim Harmandir Sahib — fulfilling a vow that his head would fall at the Golden Temple. He kept it.
+    </p>
+    <a href="about.html" class="link-arrow mt-6" style="display:inline-flex;" data-en="Read the Full Story" data-pa="ਪੂਰੀ ਕਹਾਣੀ ਪੜ੍ਹੋ">Read the Full Story</a>
   </div>
 </section>
 
-<!-- ── ABOUT ── -->
-<section class="section" id="about">
+<!-- ── UPCOMING EVENTS ── -->
+<section class="section home-events" id="home-events">
   <div class="container">
-    <h2 class="section-title" data-i18n="aboutTitle">About Us</h2>
-    <div class="about-grid">
-      <div class="about-card">
-        <h3 data-i18n="aboutGroupTitle">Our Group</h3>
-        <p data-i18n="aboutGroupText">Chaupehra Baba Deep Singh Ji is a Sikh kirtan group based at Gurdwara Nanaksar, Surrey, BC. We come together in the spirit of seva and simran — performing kirtan at Gurdwara Nanaksar and community events across the Lower Mainland.</p>
-      </div>
-      <div class="about-card">
-        <h3>Gurdwara Nanaksar Surrey</h3>
-        <p>Located at 14212 88th Ave, Surrey, BC (Cloverdale), Gurdwara Nanaksar is the third Nanaksar Gurdwara in Canada — established in 2003 under the blessing of Sant Baba Gurdev Singh Ji. Daily Kirtan Deewan and monthly Pooranmashi programs are held for all sangat.</p>
-      </div>
-      <div class="about-card">
-        <h3 data-i18n="aboutBDSTitle">Baba Deep Singh Ji</h3>
-        <p data-i18n="aboutBDSText">Baba Deep Singh Ji (1682–1757) was a revered Sikh scholar, soldier, and martyr. A devout student of Guru Gobind Singh Ji, he became head of the Shahid Misl and devoted his life to the protection of the Sikh faith, Gurbani, and the Harmandir Sahib. He is remembered as a symbol of unwavering courage and dedication.</p>
-      </div>
+    <div class="section-header-row">
+      <h2 class="section-title" data-en="Upcoming Events" data-pa="ਆਉਣ ਵਾਲੇ ਸਮਾਗਮ">Upcoming Events</h2>
+      <a href="events.html" class="link-arrow" data-en="View Full Schedule" data-pa="ਪੂਰਾ ਪ੍ਰੋਗਰਾਮ">View Full Schedule</a>
     </div>
-  </div>
-</section>
-
-<!-- ── EVENTS ── -->
-<section class="section section-alt" id="events">
-  <div class="container">
-    <h2 class="section-title" data-i18n="eventsTitle">Upcoming Events</h2>
-    <div class="events-grid" id="eventsGrid">
-      <p class="events-loading">Loading events…</p>
-    </div>
-    <p class="events-note" data-i18n="eventsNote">Join our WhatsApp group or newsletter for event announcements.</p>
-  </div>
-</section>
-
-<!-- ── MEDIA ── -->
-<section class="section" id="media">
-  <div class="container">
-    <h2 class="section-title" data-i18n="mediaTitle">Kirtan Recordings</h2>
-    <div class="media-grid">
-      <!-- Replace with real YouTube video IDs when available -->
-      <div class="video-wrap">
-        <div class="video-placeholder">&#128249; Kirtan recordings coming soon</div>
-        <p class="video-caption">[Kirtan Program Title — Date, Venue]</p>
-      </div>
-      <div class="video-wrap">
-        <div class="video-placeholder">&#128249; Kirtan recordings coming soon</div>
-        <p class="video-caption">[Kirtan Program Title — Date, Venue]</p>
-      </div>
-      <div class="video-wrap">
-        <div class="video-placeholder">&#128249; Kirtan recordings coming soon</div>
-        <p class="video-caption">[Kirtan Program Title — Date, Venue]</p>
-      </div>
-    </div>
-    <div class="media-cta">
-      <a href="https://youtube.com/@chaupehrabdsjicanada" target="_blank" rel="noopener noreferrer" class="btn-primary" data-i18n="mediaYT">View Full YouTube Channel</a>
-    </div>
-  </div>
-</section>
-
-<!-- ── GALLERY ── -->
-<section class="section section-alt" id="gallery">
-  <div class="container">
-    <h2 class="section-title" data-i18n="galleryTitle">Photo Gallery</h2>
-    <div class="gallery-grid" id="galleryGrid">
-      <p class="gallery-loading">Loading photos…</p>
-    </div>
-  </div>
-</section>
-
-<!-- ── RESOURCES ── -->
-<section class="section" id="resources">
-  <div class="container">
-    <h2 class="section-title" data-i18n="resourcesTitle">Gurbani Resources</h2>
-    <div class="resources-grid">
-      <a class="resource-card" href="https://www.sikhitothemax.org" target="_blank" rel="noopener noreferrer">
-        <span class="resource-icon">📖</span>
-        <h3>SikhiToTheMax</h3>
-        <p data-i18n="resSikhiMax">Search and read Gurbani with translations</p>
-      </a>
-      <a class="resource-card" href="https://www.nitnem.org" target="_blank" rel="noopener noreferrer">
-        <span class="resource-icon">🙏</span>
-        <h3>Nitnem.org</h3>
-        <p data-i18n="resNitnem">Daily Nitnem Banis with audio</p>
-      </a>
-      <a class="resource-card" href="https://www.srigranth.org" target="_blank" rel="noopener noreferrer">
-        <span class="resource-icon">📜</span>
-        <h3>Sri Granth</h3>
-        <p data-i18n="resSriGranth">Full Sri Guru Granth Sahib Ji online</p>
-      </a>
-      <a class="resource-card" href="#" aria-disabled="true" title="Link coming soon">
-        <span class="resource-icon">🎵</span>
-        <h3>[Resource Name]</h3>
-        <p data-i18n="resCustom">[Add your own resource or kirtan learning material]</p>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ── NEWS / ANNOUNCEMENTS ── -->
-<section class="section section-alt" id="news">
-  <div class="container">
-    <h2 class="section-title" data-i18n="newsTitle">Announcements</h2>
-    <div class="news-list">
-      <article class="news-card">
-        <span class="news-date">Pooranmashi — Every Full Moon</span>
-        <h3>Monthly Pooranmashi Celebration</h3>
-        <p>Sri Akhand Path Bhog followed by Katha &amp; Kirtan at Gurdwara Nanaksar Surrey. All sangat is warmly welcome. Waheguru Ji Ka Khalsa, Waheguru Ji Ki Fateh.</p>
-      </article>
-      <article class="news-card">
-        <span class="news-date">Daily Kirtan Deewan</span>
-        <h3>Gurdwara Nanaksar — Daily Schedule</h3>
-        <p><strong>Morning:</strong> 2:00–3:30 am Path Sukhmani Sahib · 3:30–6:30 am Asa Di Waar &amp; Kirtan · 6:30 am Hukamnama &amp; Ardas<br><strong>Evening:</strong> 4:30–5:15 pm Katha · 5:15–7:00 pm Kirtan · 7:00–7:30 pm Rehras Sahib · 7:30–8:30 pm Kirtan &amp; Katha Vichar · 8:30 pm Hukamnama · 8:45 pm Ardas</p>
-      </article>
-      <article class="news-card">
-        <span class="news-date">Established 2003</span>
-        <h3>About Gurdwara Nanaksar Surrey</h3>
-        <p>Gurdwara Nanaksar Surrey (Cloverdale) is the third Nanaksar Gurdwara in Canada, established under the blessing of Sant Baba Gurdev Singh Ji. Located at 14212 88th Ave, Surrey, BC — serving the Lower Mainland Sikh community since 2003.</p>
-      </article>
-    </div>
-
-    <!-- Newsletter Signup — powered by Formspree -->
-    <div class="newsletter-box">
-      <h3 data-i18n="newsletterTitle">Stay Updated</h3>
-      <p data-i18n="newsletterSub">Get event announcements delivered to your inbox.</p>
-      <form action="https://formspree.io/f/[YOUR_FORMSPREE_ID]" method="POST" class="newsletter-form">
-        <input type="hidden" name="_subject" value="Newsletter Signup — Chaupehra BDSJ" />
-        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
-        <label class="sr-only" for="newsletter-email">Email address</label>
-        <input id="newsletter-email" type="email" name="email" placeholder="your@email.com" required data-i18n-placeholder="newsletterPlaceholder" />
-        <button type="submit" class="btn-primary" data-i18n="newsletterBtn">Subscribe</button>
-      </form>
-    </div>
-  </div>
-</section>
-
-<!-- ── SEVA / DONATION ── -->
-<section class="section" id="seva">
-  <div class="container">
-    <h2 class="section-title" data-i18n="sevaTitle">Seva & Donations</h2>
-    <p class="section-intro" data-i18n="sevaIntro">Your seva supports kirtan programs, instrument maintenance, sound equipment, and community outreach. Every contribution, big or small, is deeply appreciated. Waheguru Ji Ka Khalsa, Waheguru Ji Ki Fateh.</p>
-    <div class="seva-grid">
-      <div class="seva-card">
-        <span class="seva-icon">💸</span>
-        <h3 data-i18n="sevaEtransfer">E-Transfer</h3>
-        <p data-i18n="sevaEtransferDetail">Send to: <strong>[your-etransfer@email.com]</strong></p>
-        <p data-i18n="sevaEtransferNote">Please include your name and "Seva" in the message.</p>
-      </div>
-      <div class="seva-card">
-        <span class="seva-icon">🌐</span>
-        <h3>PayPal</h3>
-        <span class="btn-gold">[PayPal link coming soon]</span>
-      </div>
-      <div class="seva-card">
-        <span class="seva-icon">🤝</span>
-        <h3 data-i18n="sevaVolunteer">Volunteer Seva</h3>
-        <p data-i18n="sevaVolunteerDetail">Want to help with sound, logistics, langar, or admin? Fill in the form below.</p>
-        <a href="#volunteer" class="btn-primary" data-i18n="sevaVolunteerBtn">Sign Up</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── VOLUNTEER FORM ── -->
-<section class="section section-alt" id="volunteer">
-  <div class="container">
-    <h2 class="section-title" data-i18n="volunteerTitle">Join / Volunteer</h2>
-    <p data-i18n="volunteerIntro">We welcome sangat of all skill levels — musicians, organizers, youth, and anyone who wishes to serve.</p>
-    <form action="https://formspree.io/f/[YOUR_FORMSPREE_ID]" method="POST" class="form-main">
-      <input type="hidden" name="_subject" value="Volunteer Application — Chaupehra BDSJ" />
-      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
-      <div class="form-row">
-        <label class="sr-only" for="vol-name">Full Name</label>
-        <input id="vol-name" type="text"  name="name"  placeholder="Full Name"    required data-i18n-placeholder="formName" />
-        <label class="sr-only" for="vol-email">Email Address</label>
-        <input id="vol-email" type="email" name="email" placeholder="Email Address" required data-i18n-placeholder="formEmail" />
-      </div>
-      <label class="sr-only" for="vol-phone">Phone Number</label>
-      <input id="vol-phone" type="tel" name="phone" placeholder="Phone Number (optional)" data-i18n-placeholder="formPhone" />
-      <label class="sr-only" for="vol-role">How would you like to serve?</label>
-      <select id="vol-role" name="role">
-        <option value="" disabled selected data-i18n="formRoleDefault">How would you like to serve?</option>
-        <option value="kirtan">Kirtan / Music</option>
-        <option value="sound">Sound & AV</option>
-        <option value="logistics">Logistics & Setup</option>
-        <option value="langar">Langar Seva</option>
-        <option value="admin">Admin / Social Media</option>
-        <option value="youth">Youth Programs</option>
-        <option value="other">Other</option>
-      </select>
-      <label class="sr-only" for="vol-message">Tell us about yourself</label>
-      <textarea id="vol-message" name="message" rows="4" placeholder="Tell us about yourself..." data-i18n-placeholder="formMessage"></textarea>
-      <button type="submit" class="btn-primary" data-i18n="formSubmit">Submit</button>
-    </form>
-  </div>
-</section>
-
-<!-- ── CONTACT ── -->
-<section class="section" id="contact">
-  <div class="container">
-    <h2 class="section-title" data-i18n="contactTitle">Contact Us</h2>
-    <div class="contact-grid">
-      <div class="contact-info">
-        <p>📍 14212 88th Ave, Surrey, BC (Cloverdale)</p>
-        <p>🌐 <a href="https://gurdwarananaksar.org/english/surrey_e.html" target="_blank" rel="noopener noreferrer">gurdwarananaksar.org</a></p>
-        <div class="social-links">
-          <a href="https://instagram.com/chaupehrabdsjicanada" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/instagram.svg" alt="" class="social-icon" />
-          </a>
-          <a href="https://youtube.com/@chaupehrabdsjicanada" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/youtube.svg" alt="" class="social-icon" />
-          </a>
-          <a href="https://www.tiktok.com/@chaupehrabdsjicanada" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tiktok.svg" alt="" class="social-icon" />
-          </a>
-          <a href="#whatsapp-qr" aria-label="WhatsApp Group" class="whatsapp-trigger">
-            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/whatsapp.svg" alt="" class="social-icon" />
-          </a>
-        </div>
-
-        <!-- WhatsApp QR popup -->
-        <div class="whatsapp-qr-box" id="whatsapp-qr">
-          <p style="font-size:0.85rem;color:var(--text-sub);margin-bottom:0.5rem;">Scan to join the WhatsApp group</p>
-          <img src="assets/whatsapp-qr.jpg" alt="WhatsApp group QR code — ChaupehraBDSjiCanada" style="width:160px;border-radius:8px;" />
-          <p style="font-size:0.8rem;color:var(--text-sub);margin-top:0.4rem;font-weight:600;">ChaupehraBDSjiCanada</p>
-        </div>
-
-        <!-- Contact Form -->
-        <form action="https://formspree.io/f/[YOUR_FORMSPREE_ID]" method="POST" class="form-main" style="margin-top:1.5rem;">
-          <input type="hidden" name="_subject" value="Contact — Chaupehra BDSJ" />
-          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
-          <label class="sr-only" for="contact-name">Your Name</label>
-          <input id="contact-name" type="text"  name="name"    placeholder="Your Name"    required data-i18n-placeholder="formName" />
-          <label class="sr-only" for="contact-email">Your Email</label>
-          <input id="contact-email" type="email" name="email"   placeholder="Your Email"   required data-i18n-placeholder="formEmail" />
-          <label class="sr-only" for="contact-message">Your Message</label>
-          <textarea id="contact-message" name="message" rows="4"  placeholder="Your message..." required data-i18n-placeholder="formMessage"></textarea>
-          <button type="submit" class="btn-primary" data-i18n="formSubmit">Send Message</button>
-        </form>
-      </div>
-
-      <!-- Google Maps embed — no API key needed -->
-      <div class="map-wrap">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2608.5!2d-122.7279!3d49.1629!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5485d8b0f2b0f0f1%3A0x1!2s14212+88+Ave%2C+Surrey%2C+BC!5e0!3m2!1sen!2sca!4v1"
-          width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
-          referrerpolicy="strict-origin-when-cross-origin"
-          sandbox="allow-scripts allow-same-origin allow-popups"
-          title="Surrey BC Map">
-        </iframe>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── BOOKINGS ── -->
-<section class="section" id="bookings">
-  <div class="container">
-    <h2 class="section-title" data-i18n="bookingsTitle">Book the Group</h2>
-    <p class="section-intro" data-i18n="bookingsIntro">Want to invite us to perform kirtan at your gurdwara, smagam, or event? Check availability and submit a request below.</p>
-
-    <div class="booking-grid">
-      <div class="booking-calendar-wrap">
-        <h3 class="booking-sub" data-i18n="bookingsCalTitle">Available Dates</h3>
-        <p class="booking-legend">
-          <span class="dot dot-available"></span> <span data-i18n="bookingsAvail">Available</span>
-          &nbsp;&nbsp;
-          <span class="dot dot-blocked"></span> <span data-i18n="bookingsBlocked">Unavailable</span>
-        </p>
-        <div id="availableDatesList" class="available-dates-list">
-          <p class="dates-loading" data-i18n="bookingsLoadingDates">Loading available dates…</p>
+    <!-- Recurring Chaupehra Sahib banner -->
+    <div class="chaupehra-recurring" id="chaupehra-recurring-home">
+      <div class="chaupehra-recurring-left">
+        <span class="chaupehra-recurring-badge" id="recurring-badge-home">Every Sat &amp; Sun</span>
+        <div class="chaupehra-recurring-name">
+          <strong data-en="Chaupehra Sahib" data-pa="ਚੌਪਹਿਰਾ ਸਾਹਿਬ">Chaupehra Sahib</strong>
+          <span class="gurmukhi" data-en="ਚੌਪਹਿਰਾ ਸਾਹਿਬ" data-pa="Chaupehra Sahib">ਚੌਪਹਿਰਾ ਸਾਹਿਬ</span>
         </div>
       </div>
+      <div class="chaupehra-recurring-time">
+        <span>12:00 PM – 4:00 PM</span>
+        <span class="text-muted" style="font-size:0.85em;">14210/14212 88 Ave, Surrey, BC V3W 3L7</span>
+      </div>
+    </div>
 
-      <div class="booking-form-wrap">
-        <h3 class="booking-sub" data-i18n="bookingsFormTitle">Send a Booking Request</h3>
-        <form id="bookingForm" class="form-main" novalidate>
-          <label class="sr-only" for="bk-name">Full Name</label>
-          <input id="bk-name" type="text" name="name" placeholder="Full Name" required data-i18n-placeholder="formName" />
+    <div id="home-events-list">
+      <div class="events-loading"><div class="spinner"></div></div>
+    </div>
+  </div>
+</section>
 
-          <div class="form-row">
-            <label class="sr-only" for="bk-email">Email</label>
-            <input id="bk-email" type="email" name="email" placeholder="Email Address" required data-i18n-placeholder="formEmail" />
-            <label class="sr-only" for="bk-phone">Phone</label>
-            <input id="bk-phone" type="tel" name="phone" placeholder="Phone (optional)" data-i18n-placeholder="formPhone" />
+<!-- ── MEDIA PREVIEW ── -->
+<section class="section section--mid home-media">
+  <div class="container">
+    <h2 class="section-title" data-en="Media" data-pa="ਮੀਡੀਆ">Media</h2>
+    <div class="home-media-grid">
+      <a href="media.html#livestream" class="home-media-tile" aria-label="Watch latest stream">
+        <div class="home-media-tile-img" id="home-stream-thumb">
+          <div class="home-media-tile-overlay">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#0D1B2A"/></svg>
           </div>
+        </div>
+        <div class="home-media-tile-label">
+          <span id="home-live-badge"></span>
+          <span data-en="Watch Live Stream" data-pa="ਲਾਈਵ ਸਟ੍ਰੀਮ ਦੇਖੋ">Watch Live Stream</span>
+        </div>
+      </a>
+      <a href="media.html#gallery" class="home-media-tile" aria-label="View photo gallery">
+        <div class="home-media-tile-img" id="home-gallery-thumb">
+          <div class="home-media-tile-overlay">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+        </div>
+        <div class="home-media-tile-label">
+          <span data-en="Photo Gallery" data-pa="ਫ਼ੋਟੋ ਗੈਲਰੀ">Photo Gallery</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
 
-          <label class="sr-only" for="bk-date">Requested Date</label>
-          <input id="bk-date" type="date" name="event_date" required />
+<!-- ── CONTACT + LOCATION ── -->
+<section class="section home-contact" id="contact-home">
+  <div class="container">
+    <h2 class="section-title" data-en="Get in Touch" data-pa="ਸੰਪਰਕ ਕਰੋ">Get in Touch</h2>
+    <div class="home-contact-grid">
 
-          <label class="sr-only" for="bk-type">Event Type</label>
-          <select id="bk-type" name="event_type">
-            <option value="" disabled selected data-i18n="bookingsEventType">Type of event</option>
-            <option value="Gurdwara Kirtan">Gurdwara Kirtan</option>
-            <option value="Smagam">Smagam</option>
-            <option value="Akhand Path">Akhand Path</option>
-            <option value="Wedding / Anand Karaj">Wedding / Anand Karaj</option>
-            <option value="Antim Ardas">Antim Ardas</option>
-            <option value="Community Event">Community Event</option>
-            <option value="Other">Other</option>
-          </select>
-
-          <label class="sr-only" for="bk-msg">Message</label>
-          <textarea id="bk-msg" name="message" rows="3" placeholder="Additional details (venue, time, any requests)…" data-i18n-placeholder="bookingsMsg"></textarea>
-
-          <button type="submit" class="btn-primary" data-i18n="formSubmit">Submit Request</button>
-          <p class="form-status" id="bookingStatus"></p>
+      <div class="home-contact-form-col">
+        <form id="home-contact-form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="hc-name" data-en="Full Name *" data-pa="ਪੂਰਾ ਨਾਮ *">Full Name *</label>
+            <input class="form-input" type="text" id="hc-name" autocomplete="name" required />
+            <span class="form-error" id="hc-name-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hc-phone" data-en="Phone Number *" data-pa="ਫ਼ੋਨ ਨੰਬਰ *">Phone Number *</label>
+            <input class="form-input" type="tel" id="hc-phone" autocomplete="tel" required />
+            <span class="form-error" id="hc-phone-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hc-email" data-en="Email Address *" data-pa="ਈਮੇਲ ਪਤਾ *">Email Address *</label>
+            <input class="form-input" type="email" id="hc-email" autocomplete="email" required />
+            <span class="form-error" id="hc-email-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hc-reason" data-en="Reason *" data-pa="ਕਾਰਨ *">Reason *</label>
+            <select class="form-select" id="hc-reason" required>
+              <option value="">— Select —</option>
+              <option value="volunteer">Volunteer</option>
+              <option value="book_event">Book an Event</option>
+              <option value="donate">Donate</option>
+              <option value="general">General Enquiry</option>
+              <option value="other">Other</option>
+            </select>
+            <span class="form-error" id="hc-reason-error" role="alert"></span>
+          </div>
+          <div class="form-group hidden" id="hc-date-group">
+            <label class="form-label" for="hc-date" data-en="Preferred Date" data-pa="ਪਸੰਦੀਦਾ ਮਿਤੀ">Preferred Date</label>
+            <input class="form-input" type="date" id="hc-date" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hc-comments" data-en="Comments" data-pa="ਟਿੱਪਣੀਆਂ">Comments</label>
+            <textarea class="form-textarea" id="hc-comments" rows="3" maxlength="1000"></textarea>
+          </div>
+          <div class="form-error" id="hc-rate-error" role="alert" style="display:none;margin-bottom:var(--space-4);"></div>
+          <button type="submit" class="btn btn-primary btn-block" id="hc-submit">
+            <span id="hc-submit-text" data-en="Send Message" data-pa="ਸੁਨੇਹਾ ਭੇਜੋ">Send Message</span>
+            <div class="spinner spinner-sm hidden" id="hc-spinner"></div>
+          </button>
         </form>
+        <div class="form-success hidden" id="hc-success" style="display:none;">
+          <div class="form-success-icon">🙏</div>
+          <h3 data-en="Thank you." data-pa="ਧੰਨਵਾਦ।">Thank you.</h3>
+          <p data-en="We will be in touch soon." data-pa="ਅਸੀਂ ਜਲਦੀ ਤੁਹਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰਾਂਗੇ।">We will be in touch soon.</p>
+          <span class="gurmukhi">ਵਾਹਿਗੁਰੂ ਜੀ ਕਾ ਖਾਲਸਾ, ਵਾਹਿਗੁਰੂ ਜੀ ਕੀ ਫਤਿਹ</span>
+        </div>
+      </div>
+
+      <div class="home-location-col">
+        <div class="card home-location-card">
+          <p class="footer-heading" data-en="Our Location" data-pa="ਸਾਡਾ ਸਥਾਨ">Our Location</p>
+          <address style="font-style:normal;margin-top:var(--space-3);font-size:var(--text-lg);line-height:1.8;color:var(--off-white);">
+            <strong style="color:var(--saffron);display:block;margin-bottom:var(--space-2);">Chaupehra Baba Deep Singh Ji</strong>
+            14210/14212 88 Ave<br/>
+            Surrey, BC V3W 3L7<br/>
+            Canada
+          </address>
+          <a href="https://maps.apple.com/?q=14210+88+Ave+Surrey+BC+V3W+3L7"
+             id="home-maps-btn"
+             class="btn btn-secondary btn-block mt-6"
+             target="_blank" rel="noopener"
+             aria-label="Open location in Maps">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span data-en="Open in Maps" data-pa="ਨਕਸ਼ੇ ਵਿੱਚ ਖੋਲ੍ਹੋ">Open in Maps</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── LIVE STREAM BANNER ── -->
-<section class="section section-alt" id="live">
-  <div class="container" style="text-align:center;">
-    <h2 class="section-title" data-i18n="liveTitle">Live Kirtan Stream</h2>
-    <p data-i18n="liveSub">We go live on YouTube and TikTok during major smagams. Follow us to get notified.</p>
-    <div class="live-links">
-      <a href="https://youtube.com/@chaupehrabdsjicanada" target="_blank" rel="noopener noreferrer" class="btn-primary" data-i18n="liveYT">YouTube Live</a>
-      <a href="https://www.tiktok.com/@chaupehrabdsjicanada" target="_blank" rel="noopener noreferrer" class="btn-gold" data-i18n="liveTT">TikTok</a>
-    </div>
-  </div>
-</section>
+<div id="footer-placeholder"></div>
 
-</main>
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+  import { SUPABASE_URL, SUPABASE_ANON, YOUTUBE_CHANNEL_ID, YOUTUBE_API_KEY } from './supabase-config.js';
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-<!-- ── FOOTER ── -->
-<footer class="footer">
-  <div class="footer-inner">
-    <span class="khanda footer-khanda">☬</span>
-    <p data-i18n="footerLine1">Chaupehra Baba Deep Singh Ji · Surrey, BC</p>
-    <p class="footer-fateh">ਵਾਹਿਗੁਰੂ ਜੀ ਕਾ ਖਾਲਸਾ, ਵਾਹਿਗੁਰੂ ਜੀ ਕੀ ਫਤਹਿ</p>
-    <p class="footer-copy" data-i18n="footerCopy">© 2026 Chaupehra Baba Deep Singh Ji. All rights reserved.</p>
-  </div>
-</footer>
+  /* ── Hero carousel ── */
+  async function initHeroCarousel() {
+    const track  = document.getElementById('hero-track');
+    const dotsEl = document.getElementById('hero-dots');
+    const { data: photos } = await sb.from('photos').select('url,storage_path').order('sort_order').limit(8);
+    const urls = (photos || []).map(p =>
+      p.url || sb.storage.from('gallery').getPublicUrl(p.storage_path).data.publicUrl
+    );
+    if (!urls.length) return;
 
-<script type="module" src="script.js"></script>
+    track.innerHTML = urls.map((u, i) =>
+      `<div class="hero-slide ${i===0?'active':''}" style="background-image:url('${u}')"></div>`
+    ).join('');
+    dotsEl.innerHTML = urls.map((_, i) =>
+      `<button class="hero-dot ${i===0?'active':''}" data-idx="${i}" aria-label="Slide ${i+1}"></button>`
+    ).join('');
+
+    let cur = 0;
+    const slides = track.querySelectorAll('.hero-slide');
+    const dots   = dotsEl.querySelectorAll('.hero-dot');
+    const goTo = i => {
+      slides[cur].classList.remove('active'); dots[cur].classList.remove('active');
+      cur = (i + slides.length) % slides.length;
+      slides[cur].classList.add('active'); dots[cur].classList.add('active');
+    };
+    let timer;
+    const resetTimer = () => {
+      clearInterval(timer);
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+        timer = setInterval(() => goTo(cur + 1), 5000);
+    };
+    dots.forEach(d => d.addEventListener('click', () => { goTo(+d.dataset.idx); resetTimer(); }));
+    resetTimer();
+  }
+
+  /* ── Upcoming events (max 3) ── */
+  async function loadHomeEvents() {
+    const el = document.getElementById('home-events-list');
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const until = new Date(Date.now() + 30 * 864e5).toISOString().split('T')[0];
+      const { data, error } = await sb.from('events')
+        .select('*').gte('date', today).lte('date', until)
+        .order('date').order('start_time').limit(3);
+      if (error) throw error;
+      if (!data.length) { el.innerHTML = ''; return; }
+      const fmtD = d => new Date(d+'T00:00:00').toLocaleDateString('en-CA',{weekday:'short',day:'numeric',month:'short'});
+      const fmtT = t => { if(!t)return''; const[h,m]=t.split(':'); const d=new Date(); d.setHours(+h,+m); return d.toLocaleTimeString('en-CA',{hour:'numeric',minute:'2-digit',hour12:true}); };
+      el.innerHTML = `<div class="home-events-list">${data.map(ev=>`
+        <div class="home-event-row${ev.is_gurpurab?' home-event-row--gurpurab':''}">
+          <div class="home-event-date">${fmtD(ev.date)}</div>
+          <div class="home-event-body">
+            <span class="home-event-name">${ev.name}</span>
+            ${ev.start_time?`<span class="home-event-time">${fmtT(ev.start_time)}${ev.end_time?' – '+fmtT(ev.end_time):''}</span>`:''}
+          </div>
+        </div>`).join('')}</div>`;
+    } catch { el.innerHTML = `<p class="text-muted">Unable to load events.</p>`; }
+  }
+
+  /* ── Media preview ── */
+  async function loadMediaPreview() {
+    try {
+      const res = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${YOUTUBE_API_KEY}&channelId=${YOUTUBE_CHANNEL_ID}&part=snippet&order=date&maxResults=1&type=video`);
+      if (res.ok) {
+        const json = await res.json();
+        const vid = json.items?.[0];
+        if (vid) {
+          const thumb = vid.snippet.thumbnails?.medium?.url;
+          if (thumb) document.getElementById('home-stream-thumb').style.backgroundImage = `url('${thumb}')`;
+          if (vid.snippet.liveBroadcastContent === 'live') {
+            document.getElementById('home-live-badge').outerHTML = `<span class="badge badge-live">● LIVE</span>`;
+          }
+        }
+      }
+    } catch {}
+    try {
+      const { data } = await sb.from('photos').select('url,storage_path').order('sort_order').limit(1);
+      if (data?.length) {
+        const url = data[0].url || sb.storage.from('gallery').getPublicUrl(data[0].storage_path).data.publicUrl;
+        document.getElementById('home-gallery-thumb').style.backgroundImage = `url('${url}')`;
+      }
+    } catch {}
+  }
+
+  /* ── Home contact form ── */
+  function initHomeForm() {
+    const reasonEl = document.getElementById('hc-reason');
+    const dateGrp  = document.getElementById('hc-date-group');
+    const dateIn   = document.getElementById('hc-date');
+    dateIn.min = new Date().toISOString().split('T')[0];
+    reasonEl.addEventListener('change', () => {
+      const show = reasonEl.value === 'book_event';
+      dateGrp.classList.toggle('hidden', !show);
+      dateIn.required = show;
+    });
+    const showErr = (id, msg) => { const e=document.getElementById(id); e.textContent=msg; e.classList.add('visible'); };
+    const clrErr  = id => { const e=document.getElementById(id); e.textContent=''; e.classList.remove('visible'); };
+    ['hc-name','hc-phone','hc-email'].forEach(id =>
+      document.getElementById(id).addEventListener('input', () => clrErr(id+'-error'))
+    );
+    document.getElementById('home-contact-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      ['hc-name-error','hc-phone-error','hc-email-error','hc-reason-error'].forEach(clrErr);
+      const name=document.getElementById('hc-name').value.trim();
+      const phone=document.getElementById('hc-phone').value.trim();
+      const email=document.getElementById('hc-email').value.trim();
+      const reason=document.getElementById('hc-reason').value;
+      let valid=true;
+      if(!name){showErr('hc-name-error','Please enter your name.');valid=false;}
+      if(!phone){showErr('hc-phone-error','Please enter your phone number.');valid=false;}
+      if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('hc-email-error','Please enter a valid email.');valid=false;}
+      if(!reason){showErr('hc-reason-error','Please select a reason.');valid=false;}
+      if(!valid)return;
+      const KEY='chaupehra_contact_times', now=Date.now();
+      const times=JSON.parse(localStorage.getItem(KEY)||'[]').filter(t=>now-t<864e5);
+      if(times.length>=3){const el=document.getElementById('hc-rate-error');el.textContent='Too many submissions today. Please try again tomorrow.';el.style.display='block';return;}
+      times.push(now);localStorage.setItem(KEY,JSON.stringify(times));
+      const btn=document.getElementById('hc-submit');
+      btn.disabled=true;
+      document.getElementById('hc-spinner').classList.remove('hidden');
+      document.getElementById('hc-submit-text').classList.add('hidden');
+      try {
+        const{error}=await sb.from('inquiries').insert({name,phone,email,reason,preferred_date:document.getElementById('hc-date').value||null,comments:document.getElementById('hc-comments').value.trim()||null});
+        if(error)throw error;
+        document.getElementById('home-contact-form').style.display='none';
+        const s=document.getElementById('hc-success');s.classList.remove('hidden');s.style.display='block';
+      } catch {
+        const el=document.getElementById('hc-rate-error');el.textContent='Something went wrong. Please try again.';el.style.display='block';
+        btn.disabled=false;document.getElementById('hc-spinner').classList.add('hidden');document.getElementById('hc-submit-text').classList.remove('hidden');
+      }
+    });
+  }
+
+  if(/android/i.test(navigator.userAgent))
+    document.getElementById('home-maps-btn').href='https://www.google.com/maps/search/?api=1&query=14210+88+Ave+Surrey+BC+V3W+3L7';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initHeroCarousel();
+    loadHomeEvents();
+    loadMediaPreview();
+    initHomeForm();
+  });
+</script>
+<script src="js/global.js"></script>
 </body>
 </html>

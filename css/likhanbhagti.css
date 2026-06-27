@@ -1,0 +1,341 @@
+/* ============================================================
+   LIKHAN BHAGTI SAMGAM — Page Styles
+   ============================================================ */
+
+/* ── Coming Soon Banner ── */
+.lb-coming-soon-banner {
+  background: var(--saffron);
+  color: var(--navy);
+  text-align: center;
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.5;
+}
+.lb-coming-soon-banner a {
+  color: var(--navy);
+  text-decoration: underline;
+  font-weight: 700;
+}
+.lb-coming-soon-icon {
+  margin-right: var(--space-2);
+}
+
+/* ── Intro / Event Info ── */
+.lb-intro { padding-top: var(--space-12); }
+
+.lb-shabad {
+  border-left: 4px solid var(--saffron);
+  padding: var(--space-6) var(--space-8);
+  margin-bottom: var(--space-12);
+  background: var(--navy-mid);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  font-style: italic;
+  font-size: var(--text-lg);
+  line-height: 1.8;
+  color: var(--off-white);
+}
+.lb-shabad cite {
+  display: block;
+  margin-top: var(--space-3);
+  font-style: normal;
+  font-size: var(--text-sm);
+  color: var(--saffron);
+  font-weight: 600;
+}
+
+.lb-event-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-12);
+}
+.lb-detail-card {
+  background: var(--navy-mid);
+  border: 1px solid var(--navy-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.lb-detail-label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--saffron);
+  font-weight: 600;
+}
+.lb-detail-value {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--off-white);
+}
+
+.lb-section-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--off-white);
+  margin-bottom: var(--space-6);
+  margin-top: var(--space-12);
+}
+
+/* ── Age Group Table ── */
+.lb-table-wrap {
+  overflow-x: auto;
+  margin-bottom: var(--space-12);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--navy-light);
+}
+.lb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-base);
+}
+.lb-table th {
+  background: var(--navy-light);
+  color: var(--saffron);
+  font-weight: 700;
+  padding: var(--space-4) var(--space-6);
+  text-align: left;
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.lb-table td {
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--navy-light);
+  color: var(--off-white);
+}
+.lb-table tr:nth-child(odd) td { background: var(--navy-mid); }
+.lb-table tr:nth-child(even) td { background: var(--navy); }
+.lb-note {
+  font-size: var(--text-xs);
+  color: var(--muted);
+  display: block;
+  margin-top: 2px;
+}
+
+/* ── Instructions List ── */
+.lb-instructions {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-bottom: var(--space-16);
+}
+.lb-instructions li {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+  font-size: var(--text-base);
+  line-height: 1.7;
+}
+.lb-instructions li::before {
+  content: '✦';
+  color: var(--saffron);
+  flex-shrink: 0;
+  margin-top: 4px;
+  font-size: 0.9em;
+}
+.lb-inline-link {
+  color: var(--saffron);
+  text-decoration: underline;
+}
+
+/* ── Form Section ── */
+.lb-form-section {
+  background: var(--navy-mid);
+  padding: var(--space-16) 0;
+  position: relative;
+}
+
+/* Coming-soon lock: blur the form, show overlay */
+.lb-form-section.lb-coming-soon .lb-form,
+.lb-form-section.lb-coming-soon .lb-form-title,
+.lb-form-section.lb-coming-soon .lb-form-subtitle {
+  filter: blur(4px);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.4;
+}
+.lb-coming-soon-overlay {
+  display: none;
+}
+.lb-form-section.lb-coming-soon .lb-coming-soon-overlay {
+  display: flex;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: var(--space-6);
+}
+.lb-coming-soon-card {
+  background: var(--navy);
+  border: 2px solid var(--saffron);
+  border-radius: var(--radius-lg);
+  padding: var(--space-12) var(--space-12);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+.lb-coming-soon-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--saffron);
+}
+.lb-coming-soon-sub {
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+.lb-phone-btn {
+  font-size: var(--text-lg);
+  padding: var(--space-4) var(--space-8);
+  margin-top: var(--space-2);
+}
+
+/* ── Form ── */
+.lb-form-title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--off-white);
+  margin-bottom: var(--space-2);
+}
+.lb-form-subtitle {
+  color: var(--muted);
+  margin-bottom: var(--space-8);
+  font-size: var(--text-base);
+}
+.lb-form {
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+.lb-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.lb-field label {
+  font-weight: 600;
+  font-size: var(--text-base);
+  color: var(--off-white);
+}
+.lb-optional {
+  font-weight: 400;
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+.lb-field input,
+.lb-field select,
+.lb-field textarea {
+  background: var(--navy);
+  border: 2px solid var(--navy-light);
+  border-radius: var(--radius);
+  color: var(--off-white);
+  font-family: inherit;
+  font-size: var(--text-base);
+  padding: var(--space-3) var(--space-4);
+  transition: border-color var(--transition);
+  width: 100%;
+}
+.lb-field input::placeholder,
+.lb-field textarea::placeholder { color: var(--muted); }
+.lb-field input:focus,
+.lb-field select:focus,
+.lb-field textarea:focus {
+  outline: none;
+  border-color: var(--saffron);
+}
+.lb-field select { cursor: pointer; }
+.lb-field select option { background: var(--navy); color: var(--off-white); }
+.lb-field textarea { resize: vertical; min-height: 90px; }
+
+.lb-field-error {
+  color: var(--error);
+  font-size: var(--text-xs);
+  min-height: 1.2em;
+}
+.lb-field input.invalid,
+.lb-field select.invalid { border-color: var(--error); }
+
+.lb-submit-row {
+  padding-top: var(--space-2);
+}
+.lb-submit-btn {
+  font-size: var(--text-lg);
+  padding: var(--space-4) var(--space-12);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 200px;
+  justify-content: center;
+}
+.lb-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Spinner ── */
+.lb-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: lb-spin 0.7s linear infinite;
+  display: inline-block;
+}
+@keyframes lb-spin { to { transform: rotate(360deg); } }
+
+/* ── Success / Error states ── */
+.lb-success {
+  background: rgba(72, 187, 120, 0.12);
+  border: 2px solid var(--success);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+.lb-success-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--success);
+  color: var(--navy);
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lb-success-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--success);
+}
+.lb-error-msg {
+  color: var(--error);
+  font-size: var(--text-sm);
+  background: rgba(252, 129, 129, 0.1);
+  border: 1px solid var(--error);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .lb-shabad { padding: var(--space-4) var(--space-5); font-size: var(--text-base); }
+  .lb-table th, .lb-table td { padding: var(--space-3) var(--space-4); font-size: var(--text-sm); }
+  .lb-submit-btn { width: 100%; }
+  .lb-coming-soon-card { padding: var(--space-8) var(--space-6); }
+}

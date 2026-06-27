@@ -1,0 +1,159 @@
+/* ── About page — parallax scrollytelling ── */
+
+.about-intro {
+  background: var(--navy-mid);
+  border-bottom: 1px solid var(--navy-light);
+  padding: var(--space-16) 0;
+}
+.about-lead {
+  font-size: var(--text-xl);
+  line-height: 1.8;
+  color: var(--off-white);
+  max-width: 760px;
+  font-weight: 500;
+}
+
+/* ── Act sections ── */
+.act {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.act-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  transform: scale(1.05);
+  transition: transform 0.1s linear;
+  /* Fallback colour if image missing */
+  background-color: var(--navy-mid);
+}
+
+.act-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(13,27,42,0.92) 0%, rgba(13,27,42,0.75) 100%);
+}
+.act-overlay--dark {
+  background: linear-gradient(135deg, rgba(13,27,42,0.97) 0%, rgba(13,27,42,0.88) 100%);
+}
+
+.act-content {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-24) var(--space-6);
+}
+
+.act--right .act-content { display: flex; justify-content: flex-end; }
+.act--left  .act-content { display: flex; justify-content: flex-start; }
+
+.act-text {
+  max-width: 600px;
+  width: 100%;
+}
+
+.act-number {
+  display: block;
+  font-size: 5rem;
+  font-weight: 700;
+  color: var(--saffron-glow);
+  line-height: 1;
+  margin-bottom: var(--space-2);
+  letter-spacing: -0.04em;
+  color: rgba(255,153,51,0.18);
+  user-select: none;
+}
+
+.act-title {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--saffron);
+  margin-bottom: var(--space-6);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.act-title::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: var(--saffron);
+  margin-top: var(--space-3);
+}
+
+.act-text p {
+  font-size: var(--text-lg);
+  line-height: 1.8;
+  color: var(--off-white);
+  margin-bottom: var(--space-4);
+}
+
+/* ── Quote block ── */
+.about-quote {
+  border-left: 4px solid var(--saffron);
+  padding: var(--space-6) var(--space-8);
+  margin: var(--space-8) 0;
+  background: rgba(255,153,51,0.07);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.about-quote .gurmukhi {
+  font-size: var(--text-xl);
+  display: block;
+  margin-bottom: var(--space-3);
+}
+.about-quote-en {
+  font-size: var(--text-lg) !important;
+  color: var(--muted) !important;
+  font-style: italic;
+}
+
+/* ── Emphasis line ── */
+.about-emphasis {
+  font-size: var(--text-2xl) !important;
+  font-weight: 700 !important;
+  color: var(--saffron) !important;
+  margin: var(--space-6) 0 !important;
+}
+
+/* ── Legacy box ── */
+.about-legacy {
+  background: rgba(255,153,51,0.08);
+  border: 1px solid rgba(255,153,51,0.25);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-top: var(--space-8);
+}
+.about-legacy p { margin-bottom: var(--space-3); }
+.about-legacy p:last-child { margin-bottom: 0; }
+
+/* ── Vow section accent ── */
+.act--vow .act-title { color: var(--gurmukhi-gold); }
+.act--vow .act-title::after { background: var(--gurmukhi-gold); }
+
+/* ── Martyrdom section ── */
+.act--martyrdom .act-title { font-size: var(--text-4xl); }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .act-bg {
+    background-attachment: scroll;
+    transform: none;           /* remove scale — unnecessary without parallax */
+    background-position: center top; /* show faces/subjects rather than center-crop */
+  }
+  .act--right .act-content,
+  .act--left  .act-content { justify-content: flex-start; }
+  .act-content { padding: var(--space-16) var(--space-6); }
+  .act-number { font-size: 3rem; }
+  .act-title { font-size: var(--text-2xl); }
+  .act-text p { font-size: var(--text-base); }
+  .about-quote .gurmukhi { font-size: var(--text-lg); }
+  .act--martyrdom .act-title { font-size: var(--text-2xl); }
+  .about-emphasis { font-size: var(--text-xl) !important; }
+  /* Slightly taller sections so image breathes on portrait screens */
+  .act { min-height: 85vh; }
+}

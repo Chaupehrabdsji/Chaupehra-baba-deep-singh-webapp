@@ -1,0 +1,175 @@
+/* ── Media page ── */
+
+/* Loading */
+.main-player-loading, .gallery-loading {
+  display: flex; flex-direction: column; align-items: center;
+  gap: var(--space-4); padding: var(--space-16); color: var(--muted);
+}
+
+/* Main player */
+.main-player-wrap {
+  margin-bottom: var(--space-8);
+}
+.main-player-header {
+  display: flex; align-items: center; gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+.main-player-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--off-white);
+}
+.main-player-iframe-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  background: #000;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--navy-light);
+}
+.main-player-iframe-wrap iframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+}
+
+/* Thumbnail row */
+.stream-thumbs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+.stream-thumb {
+  background: var(--navy-mid);
+  border: 1px solid var(--navy-light);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color var(--transition);
+  display: block;
+}
+.stream-thumb:hover { border-color: var(--saffron); }
+.stream-thumb-img-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+  background: #000;
+}
+.stream-thumb-img-wrap img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.stream-thumb-live {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+}
+.stream-thumb-info {
+  padding: var(--space-3) var(--space-4);
+}
+.stream-thumb-title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--off-white);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: var(--space-1);
+}
+.stream-thumb-date { font-size: var(--text-xs); }
+
+/* Subscribe CTA */
+.yt-subscribe-wrap {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--space-4);
+}
+
+/* Streams fallback */
+.streams-fallback {
+  text-align: center;
+  padding: var(--space-12);
+}
+
+/* ── Gallery Carousel ── */
+.gallery-carousel-wrap { position: relative; }
+
+.carousel {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: #000;
+  user-select: none;
+}
+.carousel-track {
+  display: flex;
+  transition: transform 0.4s ease;
+  height: 0;
+  padding-bottom: 60%;
+  /* Each slide is 100% wide so track total = n * 100% */
+}
+.carousel-slide {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  flex-shrink: 0;
+}
+/* Override: we use transform on track, not absolute positioning */
+.carousel { position: relative; overflow: hidden; }
+.carousel-track {
+  display: flex;
+  transition: transform 0.4s ease;
+}
+.carousel-slide {
+  min-width: 100%;
+  position: relative;
+  padding-bottom: 60%;
+  flex-shrink: 0;
+}
+.carousel-slide img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  background: rgba(13,27,42,0.8);
+  border: 1px solid var(--navy-light);
+  color: var(--white);
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--transition);
+  z-index: 2;
+}
+.carousel-btn:hover { background: var(--saffron); color: var(--navy); }
+.carousel-btn--prev { left: var(--space-4); }
+.carousel-btn--next { right: var(--space-4); }
+
+.carousel-dots {
+  position: absolute;
+  bottom: var(--space-4);
+  left: 50%; transform: translateX(-50%);
+  display: flex; gap: var(--space-2);
+  z-index: 2;
+}
+.carousel-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  transition: background var(--transition), transform var(--transition);
+  min-height: 0;
+}
+.carousel-dot.active {
+  background: var(--saffron);
+  transform: scale(1.3);
+}
+
+@media (max-width: 600px) {
+  .stream-thumbs { grid-template-columns: 1fr; }
+  .carousel-btn { width: 40px; height: 40px; }
+}

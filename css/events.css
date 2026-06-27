@@ -1,0 +1,155 @@
+/* ── Events page ── */
+
+.events-intro {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-12);
+}
+
+/* Loading */
+.events-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-16);
+  color: var(--muted);
+}
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid var(--navy-light);
+  border-top-color: var(--saffron);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Empty / error */
+.events-empty, .events-error {
+  text-align: center;
+  padding: var(--space-16);
+  color: var(--muted);
+  font-size: var(--text-lg);
+}
+.events-empty-icon { font-size: 3rem; margin-bottom: var(--space-4); }
+
+/* Day group */
+.events-day-group {
+  margin-bottom: var(--space-12);
+}
+
+.events-date-header {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--saffron);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--navy-light);
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.events-date-header--today { color: var(--white); }
+
+.badge-today {
+  background: var(--saffron);
+  color: var(--navy);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.badge-gurpurab {
+  background: var(--gurmukhi-gold);
+  color: var(--navy);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  vertical-align: middle;
+  margin-left: var(--space-2);
+}
+
+/* Event rows */
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.event-row {
+  display: flex;
+  gap: var(--space-4);
+  background: var(--navy-mid);
+  border: 1px solid var(--navy-light);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color var(--transition);
+}
+.event-row:hover { border-color: var(--saffron); }
+
+.event-row--gurpurab {
+  border-color: rgba(255, 213, 128, 0.3);
+  background: rgba(255, 213, 128, 0.04);
+}
+.event-row--gurpurab .event-left-bar { background: var(--gurmukhi-gold); }
+
+.event-left-bar {
+  width: 4px;
+  background: var(--saffron);
+  flex-shrink: 0;
+}
+
+.event-body {
+  padding: var(--space-4) var(--space-4) var(--space-4) 0;
+  flex: 1;
+}
+
+.event-name-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.event-name {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--white);
+}
+
+.event-multiday {
+  font-size: var(--text-sm);
+  color: var(--muted);
+  font-style: italic;
+}
+
+.event-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+.event-time,
+.event-detail {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+.event-time { color: var(--off-white); font-weight: 500; }
+
+.event-notes {
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--muted);
+  font-style: italic;
+}
+
+@media (max-width: 480px) {
+  .event-meta { gap: var(--space-3); }
+  .events-date-header { font-size: var(--text-base); }
+  .event-name { font-size: var(--text-base); }
+}

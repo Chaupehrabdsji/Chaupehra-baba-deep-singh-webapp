@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events — Chaupehra Baba Deep Singh Ji</title>
+  <meta name="description" content="Upcoming events and programs at Chaupehra Baba Deep Singh Ji, Surrey BC." />
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/events.css" />
+</head>
+<body>
+
+<div id="nav-placeholder"></div>
+
+<div class="page-title-band">
+  <div class="container">
+    <div class="page-title-bilingual">
+      <h1 class="page-title-primary" data-en="Upcoming Events" data-pa="ਆਉਣ ਵਾਲੇ ਸਮਾਗਮ">Upcoming Events</h1>
+      <p class="page-title-secondary gurmukhi" data-en="ਆਉਣ ਵਾਲੇ ਸਮਾਗਮ" data-pa="Upcoming Events">ਆਉਣ ਵਾਲੇ ਸਮਾਗਮ</p>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <p class="events-intro text-muted" data-en="All programs for the next 30 days. Times are local Surrey, BC time." data-pa="ਅਗਲੇ 30 ਦਿਨਾਂ ਦੇ ਸਾਰੇ ਪ੍ਰੋਗਰਾਮ। ਸਮਾਂ ਸਰੀ, ਬੀ.ਸੀ. ਦੇ ਅਨੁਸਾਰ ਹੈ।">
+      All programs for the next 30 days. Times are local Surrey, BC time.
+    </p>
+
+    <!-- Recurring Chaupehra Sahib banner -->
+    <div class="chaupehra-recurring" id="chaupehra-recurring-events">
+      <div class="chaupehra-recurring-left">
+        <span class="chaupehra-recurring-badge" id="recurring-badge-events">Every Sat &amp; Sun</span>
+        <div class="chaupehra-recurring-name">
+          <strong data-en="Chaupehra Sahib" data-pa="ਚੌਪਹਿਰਾ ਸਾਹਿਬ">Chaupehra Sahib</strong>
+          <span class="gurmukhi" data-en="ਚੌਪਹਿਰਾ ਸਾਹਿਬ" data-pa="Chaupehra Sahib">ਚੌਪਹਿਰਾ ਸਾਹਿਬ</span>
+        </div>
+      </div>
+      <div class="chaupehra-recurring-time">
+        <span>12:00 PM – 4:00 PM</span>
+        <span class="text-muted" style="font-size:0.85em;">14210/14212 88 Ave, Surrey, BC V3W 3L7</span>
+      </div>
+    </div>
+
+    <div id="events-container">
+      <div class="events-loading" aria-live="polite">
+        <div class="spinner"></div>
+        <p data-en="Loading schedule…" data-pa="ਪ੍ਰੋਗਰਾਮ ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…">Loading schedule…</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+  import { SUPABASE_URL, SUPABASE_ANON } from './supabase-config.js';
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  const EVENT_PRESETS = ['Chaupehra Sahib','Akhand Path','Akhand Path Bhog','Sehaj Path','Sehaj Path Bhog','Kirtan Darbar','Seva Day','Simran Smagam','Gurdwara Program'];
+
+  function formatEventDate(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString('en-CA', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  function formatTime(t) {
+    if (!t) return '';
+    const [h, m] = t.split(':');
+    const d = new Date(); d.setHours(+h, +m);
+    return d.toLocaleTimeString('en-CA', { hour: 'numeric', minute: '2-digit', hour12: true });
+  }
+
+  function groupByDate(events) {
+    const groups = {};
+    events.forEach(ev => {
+      if (!groups[ev.date]) groups[ev.date] = [];
+      groups[ev.date].push(ev);
+    });
+    return groups;
+  }
+
+  function renderEvents(events) {
+    const container = document.getElementById('events-container');
+    if (!events.length) {
+      container.innerHTML = '';
+      return;
+    }
+
+    const groups = groupByDate(events);
+    let html = '';
+
+    Object.entries(groups).forEach(([date, dayEvents]) => {
+      const isToday = date === new Date().toISOString().split('T')[0];
+      html += `
+        <div class="events-day-group">
+          <h2 class="events-date-header ${isToday ? 'events-date-header--today' : ''}">
+            ${isToday ? '<span class="badge badge-today" data-en="Today" data-pa="ਅੱਜ">Today</span> ' : ''}
+            ${formatEventDate(date)}
+          </h2>
+          <div class="events-list">`;
+
+      dayEvents.forEach(ev => {
+        const isMultiDay = ev.end_date && ev.end_date !== ev.date;
+        const isGurpurab = ev.is_gurpurab;
+        html += `
+          <article class="event-row ${isGurpurab ? 'event-row--gurpurab' : ''}">
+            <div class="event-left-bar"></div>
+            <div class="event-body">
+              <div class="event-name-row">
+                <span class="event-name">${ev.name}${isGurpurab ? ' <span class="badge badge-gurpurab">Gurpurab</span>' : ''}</span>
+                ${isMultiDay ? `<span class="event-multiday" data-en="Multi-day event" data-pa="ਕਈ ਦਿਨਾਂ ਦਾ ਸਮਾਗਮ">Until ${formatEventDate(ev.end_date)}</span>` : ''}
+              </div>
+              <div class="event-meta">
+                ${ev.start_time ? `<span class="event-time">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  ${formatTime(ev.start_time)}${ev.end_time ? ' – ' + formatTime(ev.end_time) : ''}
+                </span>` : ''}
+                ${ev.path_type ? `<span class="event-detail">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                  ${ev.path_type}
+                </span>` : ''}
+                ${ev.kirtani ? `<span class="event-detail">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                  ${ev.kirtani}
+                </span>` : ''}
+              </div>
+              ${ev.notes ? `<p class="event-notes">${ev.notes}</p>` : ''}
+            </div>
+          </article>`;
+      });
+
+      html += `</div></div>`;
+    });
+
+    container.innerHTML = html;
+    // Re-apply language
+    if (typeof setLang === 'function') setLang(getLang());
+  }
+
+  async function loadEvents() {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const until = new Date(Date.now() + 30 * 864e5).toISOString().split('T')[0];
+      const { data, error } = await sb
+        .from('events')
+        .select('*')
+        .gte('date', today)
+        .lte('date', until)
+        .order('date', { ascending: true })
+        .order('start_time', { ascending: true });
+
+      if (error) throw error;
+      renderEvents(data || []);
+    } catch (err) {
+      document.getElementById('events-container').innerHTML = `
+        <div class="events-error">
+          <p data-en="Unable to load events. Please try again later." data-pa="ਪ੍ਰੋਗਰਾਮ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ। ਕਿਰਪਾ ਕਰਕੇ ਬਾਅਦ ਵਿੱਚ ਕੋਸ਼ਿਸ਼ ਕਰੋ।">
+            Unable to load events. Please try again later.
+          </p>
+        </div>`;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadEvents);
+</script>
+<script src="js/global.js"></script>
+</body>
+</html>
