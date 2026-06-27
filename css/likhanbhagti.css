@@ -2,25 +2,6 @@
    LIKHAN BHAGTI SAMGAM — Page Styles
    ============================================================ */
 
-/* ── Coming Soon Banner ── */
-.lb-coming-soon-banner {
-  background: var(--saffron);
-  color: var(--navy);
-  text-align: center;
-  padding: var(--space-3) var(--space-6);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  line-height: 1.5;
-}
-.lb-coming-soon-banner a {
-  color: var(--navy);
-  text-decoration: underline;
-  font-weight: 700;
-}
-.lb-coming-soon-icon {
-  margin-right: var(--space-2);
-}
-
 /* ── Intro / Event Info ── */
 .lb-intro { padding-top: var(--space-12); }
 
@@ -150,54 +131,6 @@
   position: relative;
 }
 
-/* Coming-soon lock: blur the form, show overlay */
-.lb-form-section.lb-coming-soon .lb-form,
-.lb-form-section.lb-coming-soon .lb-form-title,
-.lb-form-section.lb-coming-soon .lb-form-subtitle {
-  filter: blur(4px);
-  pointer-events: none;
-  user-select: none;
-  opacity: 0.4;
-}
-.lb-coming-soon-overlay {
-  display: none;
-}
-.lb-form-section.lb-coming-soon .lb-coming-soon-overlay {
-  display: flex;
-  position: absolute;
-  inset: 0;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  padding: var(--space-6);
-}
-.lb-coming-soon-card {
-  background: var(--navy);
-  border: 2px solid var(--saffron);
-  border-radius: var(--radius-lg);
-  padding: var(--space-12) var(--space-12);
-  text-align: center;
-  max-width: 400px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-4);
-}
-.lb-coming-soon-title {
-  font-size: var(--text-xl);
-  font-weight: 700;
-  color: var(--saffron);
-}
-.lb-coming-soon-sub {
-  font-size: var(--text-sm);
-  color: var(--muted);
-}
-.lb-phone-btn {
-  font-size: var(--text-lg);
-  padding: var(--space-4) var(--space-8);
-  margin-top: var(--space-2);
-}
 
 /* ── Form ── */
 .lb-form-title {
