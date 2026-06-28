@@ -165,6 +165,12 @@
   color: var(--muted);
   font-size: var(--text-xs);
 }
+.lb-field-hint {
+  font-size: var(--text-sm);
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+}
 .lb-field input,
 .lb-field select,
 .lb-field textarea {
