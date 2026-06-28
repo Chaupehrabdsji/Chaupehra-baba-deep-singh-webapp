@@ -198,6 +198,40 @@
 .lb-field input.invalid,
 .lb-field select.invalid { border-color: var(--error); }
 
+/* ── Checkbox ── */
+.lb-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  cursor: pointer;
+  font-size: var(--text-base);
+  color: var(--off-white);
+  line-height: 1.6;
+}
+.lb-checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  accent-color: var(--saffron);
+  cursor: pointer;
+}
+.lb-agree-label { font-weight: 600; }
+.lb-agreement {
+  background: rgba(255,153,51,0.07);
+  border: 1px solid rgba(255,153,51,0.2);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+
+/* ── Numbered instructions ── */
+.lb-instructions--numbered {
+  list-style: decimal;
+  padding-left: var(--space-6);
+}
+.lb-instructions--numbered li { display: list-item; padding-left: var(--space-2); }
+.lb-instructions--numbered li::before { display: none; }
+
 .lb-submit-row {
   padding-top: var(--space-2);
 }

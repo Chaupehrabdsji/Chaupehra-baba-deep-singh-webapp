@@ -39,23 +39,23 @@
       </div>
 
       <div class="lb-field">
-        <label for="lb-phone" data-en="Phone Number *" data-pa="ਫ਼ੋਨ ਨੰਬਰ *">Phone Number <span aria-hidden="true">*</span></label>
-        <input type="tel" id="lb-phone" name="phone" required autocomplete="tel"
-               placeholder="e.g. 604-555-0123" aria-required="true" />
-        <span class="lb-field-error" id="lb-phone-error" role="alert"></span>
+        <label for="lb-father" data-en="Father's Name *" data-pa="ਪਿਤਾ ਦਾ ਨਾਮ *">Father's Name <span aria-hidden="true">*</span></label>
+        <input type="text" id="lb-father" name="father_name" required
+               placeholder="e.g. Gurpreet Singh" aria-required="true" />
+        <span class="lb-field-error" id="lb-father-error" role="alert"></span>
       </div>
 
       <div class="lb-field">
-        <label for="lb-email" data-en="Email (optional)" data-pa="ਈਮੇਲ (ਵਿਕਲਪਿਕ)">Email <span class="lb-optional">(optional)</span></label>
-        <input type="email" id="lb-email" name="email" autocomplete="email"
-               placeholder="e.g. harpreet@example.com" />
-        <span class="lb-field-error" id="lb-email-error" role="alert"></span>
+        <label for="lb-age-exact" data-en="Age *" data-pa="ਉਮਰ *">Age <span aria-hidden="true">*</span></label>
+        <input type="number" id="lb-age-exact" name="age" required min="1" max="120"
+               placeholder="e.g. 12" aria-required="true" />
+        <span class="lb-field-error" id="lb-age-exact-error" role="alert"></span>
       </div>
 
       <div class="lb-field">
         <label for="lb-age" data-en="Age Group *" data-pa="ਉਮਰ ਵਰਗ *">Age Group <span aria-hidden="true">*</span></label>
         <select id="lb-age" name="age_group" required aria-required="true">
-          <option value="" disabled selected data-en="— Select your age group —" data-pa="— ਆਪਣਾ ਉਮਰ ਵਰਗ ਚੁਣੋ —">— Select your age group —</option>
+          <option value="" disabled selected>— Select your age group —</option>
           <option value="6_under">6 years and under — 5,500 times</option>
           <option value="7_9">7 to 9 years old — 7,500 times</option>
           <option value="9_12">9 to 12 years old — 12,000 times</option>
@@ -67,15 +67,44 @@
       </div>
 
       <div class="lb-field">
-        <label for="lb-city" data-en="City / Location (optional)" data-pa="ਸ਼ਹਿਰ / ਟਿਕਾਣਾ (ਵਿਕਲਪਿਕ)">City / Location <span class="lb-optional">(optional)</span></label>
-        <input type="text" id="lb-city" name="city" autocomplete="address-level2"
-               placeholder="e.g. Surrey, BC" />
+        <label for="lb-phone" data-en="Phone / WhatsApp Number *" data-pa="ਫ਼ੋਨ / ਵਟਸਐਪ ਨੰਬਰ *">Phone / WhatsApp Number <span aria-hidden="true">*</span></label>
+        <input type="tel" id="lb-phone" name="phone" required autocomplete="tel"
+               placeholder="e.g. 604-555-0123" aria-required="true" />
+        <span class="lb-field-error" id="lb-phone-error" role="alert"></span>
+        <label class="lb-checkbox-label" style="margin-top:var(--space-2);">
+          <input type="checkbox" id="lb-whatsapp" name="is_whatsapp" />
+          <span data-en="This number is on WhatsApp" data-pa="ਇਹ ਨੰਬਰ ਵਟਸਐਪ 'ਤੇ ਹੈ">This number is on WhatsApp</span>
+        </label>
+      </div>
+
+      <div class="lb-field">
+        <label for="lb-email" data-en="Email (optional)" data-pa="ਈਮੇਲ (ਵਿਕਲਪਿਕ)">Email <span class="lb-optional">(optional)</span></label>
+        <input type="email" id="lb-email" name="email" autocomplete="email"
+               placeholder="e.g. harpreet@example.com" />
+        <span class="lb-field-error" id="lb-email-error" role="alert"></span>
+      </div>
+
+      <div class="lb-field">
+        <label for="lb-address" data-en="Full Address *" data-pa="ਪੂਰਾ ਪਤਾ *">Full Address <span aria-hidden="true">*</span></label>
+        <textarea id="lb-address" name="address" rows="3" required aria-required="true"
+                  placeholder="Street, City, Province/State, Country"></textarea>
+        <span class="lb-field-error" id="lb-address-error" role="alert"></span>
       </div>
 
       <div class="lb-field">
         <label for="lb-message" data-en="Anything else? (optional)" data-pa="ਕੁਝ ਹੋਰ? (ਵਿਕਲਪਿਕ)">Anything else? <span class="lb-optional">(optional)</span></label>
         <textarea id="lb-message" name="message" rows="3"
                   placeholder="Questions, number of participants from your family, etc."></textarea>
+      </div>
+
+      <!-- Agreement -->
+      <div class="lb-field lb-agreement">
+        <label class="lb-checkbox-label lb-agree-label">
+          <input type="checkbox" id="lb-agree" name="agreed" required aria-required="true" />
+          <span data-en="I have read and understood all the instructions and agree to follow them." data-pa="ਮੈਂ ਸਾਰੀਆਂ ਹਦਾਇਤਾਂ ਪੜ੍ਹ ਅਤੇ ਸਮਝ ਲਈਆਂ ਹਨ ਅਤੇ ਉਨ੍ਹਾਂ ਦੀ ਪਾਲਣਾ ਕਰਨ ਲਈ ਸਹਿਮਤ ਹਾਂ।">I have read and understood all the instructions and agree to follow them.</span>
+          <span aria-hidden="true"> *</span>
+        </label>
+        <span class="lb-field-error" id="lb-agree-error" role="alert"></span>
       </div>
 
       <div class="lb-submit-row">
@@ -150,14 +179,24 @@
       </table>
     </div>
 
-    <h2 class="lb-section-title" data-en="Instructions" data-pa="ਹਦਾਇਤਾਂ">Instructions</h2>
-    <ul class="lb-instructions">
-      <li data-en="Use a new notebook — write ਵਾਹਿਗੁਰੂ and your name and phone number in it." data-pa="ਨਵੀਂ ਕਾਪੀ ਵਰਤੋ — ਉਸ ਵਿੱਚ ਵਾਹਿਗੁਰੂ ਅਤੇ ਆਪਣਾ ਨਾਮ ਅਤੇ ਫ਼ੋਨ ਨੰਬਰ ਲਿਖੋ।">Use a new notebook — write <span class="gurmukhi">ਵਾਹਿਗੁਰੂ</span> and your name and phone number in it.</li>
-      <li data-en="Beautiful Gurmukhi handwriting and a clean notebook will earn bonus points." data-pa="ਸੁੰਦਰ ਗੁਰਮੁਖੀ ਲਿਖਾਈ ਅਤੇ ਸਾਫ਼ ਕਾਪੀ ਨੂੰ ਵਾਧੂ ਅੰਕ ਮਿਲਣਗੇ।">Beautiful Gurmukhi handwriting and a clean notebook will earn bonus points.</li>
-      <li data-en="Notebooks must be submitted to Gurdwara Nanaksar Sahib before September 13th, 2026." data-pa="ਕਾਪੀ 13 ਸਤੰਬਰ 2026 ਤੋਂ ਪਹਿਲਾਂ ਗੁਰਦੁਆਰਾ ਨਾਨਕਸਰ ਸਾਹਿਬ ਵਿੱਚ ਜਮ੍ਹਾ ਕਰੋ।">Notebooks must be submitted to Gurdwara Nanaksar Sahib <strong>before September 13th, 2026</strong>.</li>
-      <li data-en="Participants from all over North America are welcome to contact us for submissions." data-pa="ਸਾਰੇ ਉੱਤਰੀ ਅਮਰੀਕਾ ਤੋਂ ਭਾਗੀਦਾਰ ਸੰਪਰਕ ਕਰ ਸਕਦੇ ਹਨ।">Participants from all over North America are welcome — <a href="tel:7789281469" class="lb-inline-link">contact us</a> for submissions.</li>
-      <li data-en="Each participant who submits their completed notebook will receive a participation gift." data-pa="ਹਰ ਭਾਗੀਦਾਰ ਜੋ ਕਾਪੀ ਜਮ੍ਹਾ ਕਰੇਗਾ, ਉਸ ਨੂੰ ਭਾਗੀਦਾਰੀ ਤੋਹਫ਼ਾ ਮਿਲੇਗਾ।">Each participant who submits their completed notebook will receive a participation gift.</li>
-    </ul>
+    <h2 class="lb-section-title">Instructions</h2>
+    <ol class="lb-instructions lb-instructions--numbered">
+      <li>The last date for registration is <strong>30 June 2026</strong>.</li>
+      <li>All participants must show <strong>age proof and a photo ID</strong> at the time of submitting their notebooks.</li>
+      <li>The submission centre will be fixed in your state or nearest city. The list of centres will be uploaded by 30 June 2026.</li>
+      <li>Please write strictly according to the syllabus for your age category (see table above).</li>
+      <li>Every participant who completes the full syllabus will receive a <strong>Consolation Prize</strong>.</li>
+      <li>"Waheguru" can be written in <strong>any language</strong>. There is no restriction on pen or pencil.</li>
+      <li>No notebook or diary will be provided — participants must arrange their own.</li>
+      <li>Only one registration per email ID is valid. Use a different email for additional registrations.</li>
+      <li>Please ensure the mobile number provided is an <strong>active WhatsApp number</strong> so updates can be shared.</li>
+      <li>All updates will be shared through the registration scanner from time to time.</li>
+      <li>This seva is organised by the sangat and gurmukhs. Local management names and numbers will be available in the scanner link.</li>
+      <li>Write the <strong>page number on every page</strong>. On the first page, write: Name, Father's Name, Location, Mobile Number, Age, Address.</li>
+      <li>The number of prizes may vary by location.</li>
+      <li>Participants who complete the syllabus will receive a coupon on the day of checking. Checking dates will be announced after 30 June 2026. Major prizes will be given at the main Samagam.</li>
+      <li>All sangat members are requested to attend the Samagam. <strong>Some prizes are reserved for participants present at the Samagam.</strong></li>
+    </ol>
 
   </div>
 </section>
@@ -191,24 +230,19 @@
   }
 
   function validate() {
-    const nameOk  = validateField(
-      document.getElementById('lb-name'), 'lb-name-error',
-      v => v.trim().length >= 2, 'Please enter your full name.'
-    );
-    const phoneOk = validateField(
-      document.getElementById('lb-phone'), 'lb-phone-error',
-      v => /^[\d\s\-+().]{7,}$/.test(v.trim()), 'Please enter a valid phone number.'
-    );
-    const emailEl = document.getElementById('lb-email');
-    const emailOk = !emailEl.value.trim() || validateField(
-      emailEl, 'lb-email-error',
-      v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()), 'Please enter a valid email address.'
-    );
-    const ageOk = validateField(
-      document.getElementById('lb-age'), 'lb-age-error',
-      v => v !== '', 'Please select your age group.'
-    );
-    return nameOk && phoneOk && emailOk && ageOk;
+    const nameOk    = validateField(document.getElementById('lb-name'), 'lb-name-error', v => v.trim().length >= 2, 'Please enter your full name.');
+    const fatherOk  = validateField(document.getElementById('lb-father'), 'lb-father-error', v => v.trim().length >= 2, "Please enter your father's name.");
+    const ageExactOk = validateField(document.getElementById('lb-age-exact'), 'lb-age-exact-error', v => v.trim() !== '' && +v >= 1 && +v <= 120, 'Please enter a valid age.');
+    const ageOk     = validateField(document.getElementById('lb-age'), 'lb-age-error', v => v !== '', 'Please select your age group.');
+    const phoneOk   = validateField(document.getElementById('lb-phone'), 'lb-phone-error', v => /^[\d\s\-+().]{7,}$/.test(v.trim()), 'Please enter a valid phone number.');
+    const emailEl   = document.getElementById('lb-email');
+    const emailOk   = !emailEl.value.trim() || validateField(emailEl, 'lb-email-error', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()), 'Please enter a valid email address.');
+    const addressOk = validateField(document.getElementById('lb-address'), 'lb-address-error', v => v.trim().length >= 5, 'Please enter your full address.');
+    const agreeEl   = document.getElementById('lb-agree');
+    const agreeErr  = document.getElementById('lb-agree-error');
+    const agreeOk   = agreeEl.checked;
+    agreeErr.textContent = agreeOk ? '' : 'You must agree to the instructions to register.';
+    return nameOk && fatherOk && ageExactOk && ageOk && phoneOk && emailOk && addressOk && agreeOk;
   }
 
   form.addEventListener('submit', async (e) => {
@@ -227,12 +261,15 @@
     errorEl.hidden     = true;
 
     const payload = {
-      full_name: document.getElementById('lb-name').value.trim(),
-      phone:     document.getElementById('lb-phone').value.trim(),
-      email:     document.getElementById('lb-email').value.trim() || null,
-      age_group: document.getElementById('lb-age').value,
-      city:      document.getElementById('lb-city').value.trim() || null,
-      message:   document.getElementById('lb-message').value.trim() || null,
+      full_name:   document.getElementById('lb-name').value.trim(),
+      father_name: document.getElementById('lb-father').value.trim(),
+      age:         parseInt(document.getElementById('lb-age-exact').value),
+      age_group:   document.getElementById('lb-age').value,
+      phone:       document.getElementById('lb-phone').value.trim(),
+      is_whatsapp: document.getElementById('lb-whatsapp').checked,
+      email:       document.getElementById('lb-email').value.trim() || null,
+      address:     document.getElementById('lb-address').value.trim(),
+      message:     document.getElementById('lb-message').value.trim() || null,
     };
 
     const { error } = await sb.from('likhanbhagti_signups').insert([payload]);
