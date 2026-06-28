@@ -19,7 +19,7 @@ function setLang(lang) {
 
 function applyLang(lang) {
   document.querySelectorAll('[data-en]').forEach(el => {
-    el.textContent = lang === 'pa' ? el.dataset.pa : el.dataset.en;
+    el.innerHTML = lang === 'pa' ? el.dataset.pa : el.dataset.en;
   });
   // Bilingual title: swap primary/secondary size on lang switch
   const primary   = document.querySelector('.page-title-primary');
