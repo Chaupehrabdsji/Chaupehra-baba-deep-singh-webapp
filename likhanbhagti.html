@@ -39,41 +39,62 @@
       </div>
 
       <div class="lb-field">
-        <label for="lb-phone">WhatsApp Number <span aria-hidden="true">*</span></label>
-        <p class="lb-field-hint">Without country code — e.g. 6045550123</p>
-        <input type="tel" id="lb-phone" name="phone" required autocomplete="tel"
-               placeholder="e.g. 6045550123" aria-required="true" />
-        <span class="lb-field-error" id="lb-phone-error" role="alert"></span>
+        <label for="lb-father">Father's Name <span aria-hidden="true">*</span></label>
+        <input type="text" id="lb-father" name="father_name" required
+               placeholder="e.g. Gurpreet Singh" aria-required="true" />
+        <span class="lb-field-error" id="lb-father-error" role="alert"></span>
       </div>
 
       <div class="lb-field">
-        <label for="lb-age">Age Range <span aria-hidden="true">*</span></label>
+        <label for="lb-age-exact">Age <span aria-hidden="true">*</span></label>
+        <input type="number" id="lb-age-exact" name="age" required min="1" max="120"
+               placeholder="e.g. 12" aria-required="true" />
+        <span class="lb-field-error" id="lb-age-exact-error" role="alert"></span>
+      </div>
+
+      <div class="lb-field">
+        <label for="lb-age">Age Group <span aria-hidden="true">*</span></label>
         <select id="lb-age" name="age_group" required aria-required="true">
-          <option value="" disabled selected>— Select age range —</option>
-          <option value="3_7">3–7 years</option>
-          <option value="8_16">8–16 years</option>
-          <option value="above_16">Above 16 years</option>
+          <option value="" disabled selected>— Select your age group —</option>
+          <option value="6_under">6 years and under — 5,500 times</option>
+          <option value="7_9">7 to 9 years old — 7,500 times</option>
+          <option value="9_12">9 to 12 years old — 12,000 times</option>
+          <option value="13_15">13 to 15 years old — 15,000 times</option>
+          <option value="16_20">16 to 20 years old — 20,000 times</option>
+          <option value="21_above">21 years and above — 25,000 times</option>
         </select>
         <span class="lb-field-error" id="lb-age-error" role="alert"></span>
       </div>
 
       <div class="lb-field">
-        <label for="lb-times">How many times will you write WaheGuru Simran? <span aria-hidden="true">*</span></label>
-        <p class="lb-field-hint">Choose the target that matches your age range</p>
-        <select id="lb-times" name="simran_times" required aria-required="true">
-          <option value="" disabled selected>— Select your target —</option>
-          <option value="7100">7,100 times — for age 3–7 years</option>
-          <option value="21000">21,000 times — for age 8–16 years</option>
-          <option value="31000">31,000 times — for age above 16 years</option>
-        </select>
-        <span class="lb-field-error" id="lb-times-error" role="alert"></span>
+        <label for="lb-phone">Phone / WhatsApp Number <span aria-hidden="true">*</span></label>
+        <input type="tel" id="lb-phone" name="phone" required autocomplete="tel"
+               placeholder="e.g. 604-555-0123" aria-required="true" />
+        <span class="lb-field-error" id="lb-phone-error" role="alert"></span>
+        <label class="lb-checkbox-label" style="margin-top:var(--space-2);">
+          <input type="checkbox" id="lb-whatsapp" name="is_whatsapp" />
+          <span>This number is on WhatsApp</span>
+        </label>
       </div>
 
       <div class="lb-field">
-        <label for="lb-message">Copies Submission Details <span class="lb-optional">(optional)</span></label>
-        <p class="lb-field-hint">For more details connect to LikhanBhaktiBDSES@gmail.com — submission date will be shared on your WhatsApp</p>
+        <label for="lb-email">Email <span class="lb-optional">(optional)</span></label>
+        <input type="email" id="lb-email" name="email" autocomplete="email"
+               placeholder="e.g. harpreet@example.com" />
+        <span class="lb-field-error" id="lb-email-error" role="alert"></span>
+      </div>
+
+      <div class="lb-field">
+        <label for="lb-address">Full Address <span aria-hidden="true">*</span></label>
+        <textarea id="lb-address" name="address" rows="3" required aria-required="true"
+                  placeholder="Street, City, Province/State, Country"></textarea>
+        <span class="lb-field-error" id="lb-address-error" role="alert"></span>
+      </div>
+
+      <div class="lb-field">
+        <label for="lb-message">Anything else? <span class="lb-optional">(optional)</span></label>
         <textarea id="lb-message" name="message" rows="3"
-                  placeholder="Any notes, questions, or additional details..."></textarea>
+                  placeholder="Questions, number of participants from your family, etc."></textarea>
       </div>
 
       <!-- Agreement -->
@@ -143,18 +164,20 @@
       <table class="lb-table" role="table" aria-label="Age group writing targets">
         <thead>
           <tr>
-            <th>Age Range</th>
+            <th>Age Group</th>
             <th>Write <span class="gurmukhi">ਵਾਹਿਗੁਰੂ</span></th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>3–7 years</td><td>7,100 times</td></tr>
-          <tr><td>8–16 years</td><td>21,000 times</td></tr>
-          <tr><td>Above 16 years</td><td>31,000 times</td></tr>
+          <tr><td>6 years and under</td><td>5,500 times <span class="lb-note">(kids do Simran, elders write)</span></td></tr>
+          <tr><td>7 to 9 years old</td><td>7,500 times</td></tr>
+          <tr><td>9 to 12 years old</td><td>12,000 times</td></tr>
+          <tr><td>13 to 15 years old</td><td>15,000 times</td></tr>
+          <tr><td>16 to 20 years old</td><td>20,000 times</td></tr>
+          <tr><td>21 years and above</td><td>25,000 times</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="lb-field-hint" style="margin-bottom:var(--space-8);">You can write in any language — English, Hindi, Punjabi, etc. No restriction on pen or pencil.</p>
 
     <h2 class="lb-section-title">Instructions</h2>
     <ol class="lb-instructions lb-instructions--numbered">
@@ -207,15 +230,19 @@
   }
 
   function validate() {
-    const nameOk  = validateField(document.getElementById('lb-name'),  'lb-name-error',  v => v.trim().length >= 2, 'Please enter your full name.');
-    const phoneOk = validateField(document.getElementById('lb-phone'), 'lb-phone-error', v => /^[\d\s\-+().]{7,}$/.test(v.trim()), 'Please enter a valid phone number.');
-    const ageOk   = validateField(document.getElementById('lb-age'),   'lb-age-error',   v => v !== '', 'Please select your age range.');
-    const timesOk = validateField(document.getElementById('lb-times'), 'lb-times-error', v => v !== '', 'Please select how many times you will write.');
-    const agreeEl  = document.getElementById('lb-agree');
-    const agreeErr = document.getElementById('lb-agree-error');
-    const agreeOk  = agreeEl.checked;
+    const nameOk     = validateField(document.getElementById('lb-name'),      'lb-name-error',      v => v.trim().length >= 2, 'Please enter your full name.');
+    const fatherOk   = validateField(document.getElementById('lb-father'),    'lb-father-error',    v => v.trim().length >= 2, "Please enter your father's name.");
+    const ageExactOk = validateField(document.getElementById('lb-age-exact'), 'lb-age-exact-error', v => v.trim() !== '' && +v >= 1 && +v <= 120, 'Please enter a valid age.');
+    const ageOk      = validateField(document.getElementById('lb-age'),       'lb-age-error',       v => v !== '', 'Please select your age group.');
+    const phoneOk    = validateField(document.getElementById('lb-phone'),     'lb-phone-error',     v => /^[\d\s\-+().]{7,}$/.test(v.trim()), 'Please enter a valid phone number.');
+    const emailEl    = document.getElementById('lb-email');
+    const emailOk    = !emailEl.value.trim() || validateField(emailEl, 'lb-email-error', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()), 'Please enter a valid email address.');
+    const addressOk  = validateField(document.getElementById('lb-address'),   'lb-address-error',   v => v.trim().length >= 5, 'Please enter your full address.');
+    const agreeEl    = document.getElementById('lb-agree');
+    const agreeErr   = document.getElementById('lb-agree-error');
+    const agreeOk    = agreeEl.checked;
     agreeErr.textContent = agreeOk ? '' : 'You must agree to the instructions to register.';
-    return nameOk && phoneOk && ageOk && timesOk && agreeOk;
+    return nameOk && fatherOk && ageExactOk && ageOk && phoneOk && emailOk && addressOk && agreeOk;
   }
 
   form.addEventListener('submit', async (e) => {
@@ -234,11 +261,15 @@
     errorEl.hidden     = true;
 
     const payload = {
-      full_name:    document.getElementById('lb-name').value.trim(),
-      phone:        document.getElementById('lb-phone').value.trim(),
-      age_group:    document.getElementById('lb-age').value,
-      simran_times: parseInt(document.getElementById('lb-times').value),
-      message:      document.getElementById('lb-message').value.trim() || null,
+      full_name:   document.getElementById('lb-name').value.trim(),
+      father_name: document.getElementById('lb-father').value.trim(),
+      age:         parseInt(document.getElementById('lb-age-exact').value),
+      age_group:   document.getElementById('lb-age').value,
+      phone:       document.getElementById('lb-phone').value.trim(),
+      is_whatsapp: document.getElementById('lb-whatsapp').checked,
+      email:       document.getElementById('lb-email').value.trim() || null,
+      address:     document.getElementById('lb-address').value.trim(),
+      message:     document.getElementById('lb-message').value.trim() || null,
     };
 
     const { error } = await sb.from('likhanbhagti_signups').insert([payload]);
