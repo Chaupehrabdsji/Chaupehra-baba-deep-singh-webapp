@@ -103,28 +103,14 @@
         <span class="lb-field-error" id="lb-email-error" role="alert"></span>
       </div>
 
-      <!-- Location — searchable selects -->
+      <!-- Location — live city search -->
       <div class="lb-field">
         <label for="lb-city">City <span aria-hidden="true">*</span></label>
-        <input type="text" id="lb-city" name="city" required autocomplete="address-level2"
-               placeholder="e.g. Surrey" aria-required="true" list="lb-city-list" />
-        <datalist id="lb-city-list">
-          <option value="Surrey">
-          <option value="Vancouver">
-          <option value="Burnaby">
-          <option value="Richmond">
-          <option value="Abbotsford">
-          <option value="Kelowna">
-          <option value="Victoria">
-          <option value="Calgary">
-          <option value="Edmonton">
-          <option value="Toronto">
-          <option value="Brampton">
-          <option value="Mississauga">
-          <option value="Winnipeg">
-          <option value="Ottawa">
-          <option value="Montreal">
-        </datalist>
+        <div class="lb-city-wrap">
+          <input type="text" id="lb-city" name="city" required autocomplete="off"
+                 placeholder="Start typing your city..." aria-required="true" aria-autocomplete="list" aria-controls="lb-city-dropdown" />
+          <ul class="lb-city-dropdown" id="lb-city-dropdown" role="listbox" hidden></ul>
+        </div>
         <span class="lb-field-error" id="lb-city-error" role="alert"></span>
       </div>
 
@@ -132,33 +118,13 @@
         <div class="lb-field">
           <label for="lb-province">Province / State <span aria-hidden="true">*</span></label>
           <input type="text" id="lb-province" name="province" required autocomplete="address-level1"
-                 placeholder="e.g. BC" aria-required="true" list="lb-province-list" />
-          <datalist id="lb-province-list">
-            <option value="BC">
-            <option value="AB">
-            <option value="ON">
-            <option value="MB">
-            <option value="SK">
-            <option value="QC">
-            <option value="NS">
-            <option value="NB">
-            <option value="NL">
-            <option value="PE">
-          </datalist>
+                 placeholder="e.g. BC" aria-required="true" />
           <span class="lb-field-error" id="lb-province-error" role="alert"></span>
         </div>
         <div class="lb-field">
           <label for="lb-country">Country <span aria-hidden="true">*</span></label>
           <input type="text" id="lb-country" name="country" required autocomplete="country-name"
-                 placeholder="e.g. Canada" aria-required="true" list="lb-country-list" />
-          <datalist id="lb-country-list">
-            <option value="Canada">
-            <option value="USA">
-            <option value="India">
-            <option value="UK">
-            <option value="Australia">
-            <option value="New Zealand">
-          </datalist>
+                 placeholder="e.g. Canada" aria-required="true" />
           <span class="lb-field-error" id="lb-country-error" role="alert"></span>
         </div>
       </div>
@@ -339,6 +305,51 @@
     parentInput.required = age <= 18;
   });
 
+  // ── Live city search (Nominatim / OpenStreetMap) ────────────────────────
+  const cityInput    = document.getElementById('lb-city');
+  const cityDropdown = document.getElementById('lb-city-dropdown');
+  const provinceInput = document.getElementById('lb-province');
+  const countryInput  = document.getElementById('lb-country');
+  let cityTimer;
+
+  cityInput.addEventListener('input', () => {
+    clearTimeout(cityTimer);
+    const q = cityInput.value.trim();
+    if (q.length < 2) { cityDropdown.hidden = true; return; }
+    cityTimer = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&featuretype=city&addressdetails=1&limit=6&format=json&countrycodes=ca,us,in,gb,au,nz`,
+          { headers: { 'Accept-Language': 'en' } }
+        );
+        const results = await res.json();
+        cityDropdown.innerHTML = '';
+        if (!results.length) { cityDropdown.hidden = true; return; }
+        results.forEach(r => {
+          const city     = r.address.city || r.address.town || r.address.village || r.address.municipality || r.name;
+          const state    = r.address.state || r.address.province || '';
+          const country  = r.address.country || '';
+          const li = document.createElement('li');
+          li.role = 'option';
+          li.textContent = [city, state, country].filter(Boolean).join(', ');
+          li.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            cityInput.value    = city;
+            provinceInput.value = state;
+            countryInput.value  = country;
+            cityDropdown.hidden = true;
+            cityInput.classList.remove('invalid');
+            document.getElementById('lb-city-error').textContent = '';
+          });
+          cityDropdown.appendChild(li);
+        });
+        cityDropdown.hidden = false;
+      } catch { cityDropdown.hidden = true; }
+    }, 300);
+  });
+
+  cityInput.addEventListener('blur', () => setTimeout(() => { cityDropdown.hidden = true; }, 150));
+
   // ── Family members ───────────────────────────────────────────────────────
   let memberCount = 0;
   const membersList = document.getElementById('lb-members-list');
@@ -388,10 +399,13 @@
 
   phoneInput.addEventListener('blur', async () => {
     const phone = phoneInput.value.trim();
-    if (phone.length < 7) return;
-    const { data } = await sb.rpc('check_lb_phone_exists', { p_phone: phone });
-    dupWarn.hidden = !data;
+    if (phone.length < 7) { dupWarn.hidden = true; return; }
+    try {
+      const { data, error } = await sb.rpc('check_lb_phone_exists', { p_phone: phone });
+      dupWarn.hidden = error || !data;
+    } catch { dupWarn.hidden = true; }
   });
+  phoneInput.addEventListener('input', () => { dupWarn.hidden = true; });
 
   // ── Validation ───────────────────────────────────────────────────────────
   const form      = document.getElementById('lb-form');
