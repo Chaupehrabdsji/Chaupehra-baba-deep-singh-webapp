@@ -402,7 +402,7 @@
     if (phone.length < 7) { dupWarn.hidden = true; return; }
     try {
       const { data, error } = await sb.rpc('check_lb_phone_exists', { p_phone: phone });
-      dupWarn.hidden = error || !data;
+      dupWarn.hidden = !!error || !data;
     } catch { dupWarn.hidden = true; }
   });
   phoneInput.addEventListener('input', () => { dupWarn.hidden = true; });
