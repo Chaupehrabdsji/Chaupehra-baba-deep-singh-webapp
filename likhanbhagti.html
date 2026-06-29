@@ -27,9 +27,12 @@
   <div class="container">
 
     <h2 class="lb-form-title" data-en="Register Your Name" data-pa="ਆਪਣਾ ਨਾਮ ਦਰਜ ਕਰੋ">Register Your Name</h2>
-    <p class="lb-form-subtitle" data-en="Fill in the form below and we will confirm your registration." data-pa="ਹੇਠਾਂ ਫ਼ਾਰਮ ਭਰੋ, ਅਸੀਂ ਤੁਹਾਡੀ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਦੀ ਪੁਸ਼ਟੀ ਕਰਾਂਗੇ।">Fill in the form below and we will confirm your registration.</p>
+    <p class="lb-form-subtitle" data-en="Fill in the form below. You can also add family members in one registration." data-pa="ਹੇਠਾਂ ਫ਼ਾਰਮ ਭਰੋ। ਤੁਸੀਂ ਇੱਕੋ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਵਿੱਚ ਪਰਿਵਾਰ ਦੇ ਮੈਂਬਰ ਵੀ ਜੋੜ ਸਕਦੇ ਹੋ।">Fill in the form below. You can also add family members in one registration.</p>
 
     <form class="lb-form" id="lb-form" novalidate aria-label="Likhan Bhagti registration form">
+
+      <!-- ── PRIMARY REGISTRANT ── -->
+      <div class="lb-section-divider">Primary Registrant</div>
 
       <div class="lb-field">
         <label for="lb-name">Full Name <span aria-hidden="true">*</span></label>
@@ -38,66 +41,151 @@
         <span class="lb-field-error" id="lb-name-error" role="alert"></span>
       </div>
 
-      <div class="lb-field">
-        <label for="lb-father">Father's Name <span aria-hidden="true">*</span></label>
-        <input type="text" id="lb-father" name="father_name" required
-               placeholder="e.g. Gurpreet Singh" aria-required="true" />
-        <span class="lb-field-error" id="lb-father-error" role="alert"></span>
+      <div class="lb-row">
+        <div class="lb-field">
+          <label for="lb-age-exact">Age <span aria-hidden="true">*</span></label>
+          <input type="number" id="lb-age-exact" name="age" required min="1" max="120"
+                 placeholder="e.g. 12" aria-required="true" />
+          <span class="lb-field-error" id="lb-age-exact-error" role="alert"></span>
+        </div>
+        <div class="lb-field">
+          <label>Age Group</label>
+          <p class="lb-member-autotext" id="lb-age-group-display" style="padding:var(--space-3) 0;">Enter age to auto-fill</p>
+          <select id="lb-age" name="age_group" required aria-required="true" style="display:none">
+            <option value="" disabled selected></option>
+            <option value="6_under">6 & under</option>
+            <option value="7_9">7–9 years</option>
+            <option value="9_12">9–12 years</option>
+            <option value="13_15">13–15 years</option>
+            <option value="16_20">16–20 years</option>
+            <option value="21_above">21 & above</option>
+          </select>
+          <span class="lb-field-error" id="lb-age-error" role="alert"></span>
+        </div>
+      </div>
+
+      <!-- Parent details — shown only if age ≤ 18 -->
+      <div class="lb-field" id="lb-parent-field" hidden>
+        <label for="lb-parent">Parent / Guardian Name <span aria-hidden="true">*</span></label>
+        <input type="text" id="lb-parent" name="parent_name" autocomplete="name"
+               placeholder="e.g. Gurpreet Singh" />
+        <span class="lb-field-error" id="lb-parent-error" role="alert"></span>
       </div>
 
       <div class="lb-field">
-        <label for="lb-age-exact">Age <span aria-hidden="true">*</span></label>
-        <input type="number" id="lb-age-exact" name="age" required min="1" max="120"
-               placeholder="e.g. 12" aria-required="true" />
-        <span class="lb-field-error" id="lb-age-exact-error" role="alert"></span>
-      </div>
-
-      <div class="lb-field">
-        <label for="lb-age">Age Group <span aria-hidden="true">*</span></label>
-        <select id="lb-age" name="age_group" required aria-required="true">
-          <option value="" disabled selected>— Select your age group —</option>
-          <option value="6_under">6 years and under — 5,500 times</option>
-          <option value="7_9">7 to 9 years old — 7,500 times</option>
-          <option value="9_12">9 to 12 years old — 12,000 times</option>
-          <option value="13_15">13 to 15 years old — 15,000 times</option>
-          <option value="16_20">16 to 20 years old — 20,000 times</option>
-          <option value="21_above">21 years and above — 25,000 times</option>
+        <label for="lb-simran">How many times will you write <span class="gurmukhi">ਵਾਹਿਗੁਰੂ</span>? <span aria-hidden="true">*</span></label>
+        <p class="lb-field-hint">Auto-filled from age group. You can write in any language — English, Hindi, Punjabi, etc.</p>
+        <select id="lb-simran" name="simran_times" required aria-required="true">
+          <option value="" disabled selected>— Select age group first —</option>
+          <option value="5500">5,500 times (age 6 &amp; under)</option>
+          <option value="7500">7,500 times (age 7–9)</option>
+          <option value="12000">12,000 times (age 9–12)</option>
+          <option value="15000">15,000 times (age 13–15)</option>
+          <option value="20000">20,000 times (age 16–20)</option>
+          <option value="25000">25,000 times (age 21+)</option>
         </select>
-        <span class="lb-field-error" id="lb-age-error" role="alert"></span>
+        <span class="lb-field-error" id="lb-simran-error" role="alert"></span>
       </div>
 
       <div class="lb-field">
-        <label for="lb-phone">Phone / WhatsApp Number <span aria-hidden="true">*</span></label>
+        <label for="lb-phone">WhatsApp Number <span aria-hidden="true">*</span></label>
+        <p class="lb-field-hint">Updates will be sent via WhatsApp — enter without country code</p>
         <input type="tel" id="lb-phone" name="phone" required autocomplete="tel"
-               placeholder="e.g. 604-555-0123" aria-required="true" />
+               placeholder="e.g. 6045550123" aria-required="true" />
         <span class="lb-field-error" id="lb-phone-error" role="alert"></span>
-        <label class="lb-checkbox-label" style="margin-top:var(--space-2);">
-          <input type="checkbox" id="lb-whatsapp" name="is_whatsapp" />
-          <span>This number is on WhatsApp</span>
-        </label>
+        <span class="lb-duplicate-warn" id="lb-phone-dup" hidden>⚠️ This number is already registered. Contact us if this is a mistake.</span>
       </div>
 
       <div class="lb-field">
-        <label for="lb-email">Email <span class="lb-optional">(optional)</span></label>
-        <input type="email" id="lb-email" name="email" autocomplete="email"
-               placeholder="e.g. harpreet@example.com" />
+        <label for="lb-email">Email <span aria-hidden="true">*</span></label>
+        <input type="email" id="lb-email" name="email" required autocomplete="email"
+               placeholder="e.g. harpreet@example.com" aria-required="true" />
         <span class="lb-field-error" id="lb-email-error" role="alert"></span>
       </div>
 
+      <!-- Location — searchable selects -->
       <div class="lb-field">
-        <label for="lb-address">Full Address <span aria-hidden="true">*</span></label>
-        <textarea id="lb-address" name="address" rows="3" required aria-required="true"
-                  placeholder="Street, City, Province/State, Country"></textarea>
-        <span class="lb-field-error" id="lb-address-error" role="alert"></span>
+        <label for="lb-city">City <span aria-hidden="true">*</span></label>
+        <input type="text" id="lb-city" name="city" required autocomplete="address-level2"
+               placeholder="e.g. Surrey" aria-required="true" list="lb-city-list" />
+        <datalist id="lb-city-list">
+          <option value="Surrey">
+          <option value="Vancouver">
+          <option value="Burnaby">
+          <option value="Richmond">
+          <option value="Abbotsford">
+          <option value="Kelowna">
+          <option value="Victoria">
+          <option value="Calgary">
+          <option value="Edmonton">
+          <option value="Toronto">
+          <option value="Brampton">
+          <option value="Mississauga">
+          <option value="Winnipeg">
+          <option value="Ottawa">
+          <option value="Montreal">
+        </datalist>
+        <span class="lb-field-error" id="lb-city-error" role="alert"></span>
       </div>
 
-      <div class="lb-field">
-        <label for="lb-message">Anything else? <span class="lb-optional">(optional)</span></label>
-        <textarea id="lb-message" name="message" rows="3"
-                  placeholder="Questions, number of participants from your family, etc."></textarea>
+      <div class="lb-row">
+        <div class="lb-field">
+          <label for="lb-province">Province / State <span aria-hidden="true">*</span></label>
+          <input type="text" id="lb-province" name="province" required autocomplete="address-level1"
+                 placeholder="e.g. BC" aria-required="true" list="lb-province-list" />
+          <datalist id="lb-province-list">
+            <option value="BC">
+            <option value="AB">
+            <option value="ON">
+            <option value="MB">
+            <option value="SK">
+            <option value="QC">
+            <option value="NS">
+            <option value="NB">
+            <option value="NL">
+            <option value="PE">
+          </datalist>
+          <span class="lb-field-error" id="lb-province-error" role="alert"></span>
+        </div>
+        <div class="lb-field">
+          <label for="lb-country">Country <span aria-hidden="true">*</span></label>
+          <input type="text" id="lb-country" name="country" required autocomplete="country-name"
+                 placeholder="e.g. Canada" aria-required="true" list="lb-country-list" />
+          <datalist id="lb-country-list">
+            <option value="Canada">
+            <option value="USA">
+            <option value="India">
+            <option value="UK">
+            <option value="Australia">
+            <option value="New Zealand">
+          </datalist>
+          <span class="lb-field-error" id="lb-country-error" role="alert"></span>
+        </div>
       </div>
 
-      <!-- Agreement -->
+      <!-- ── FAMILY MEMBERS ── -->
+      <div class="lb-section-divider">
+        Family Members
+        <span class="lb-section-hint">Optional — register your whole family in one go</span>
+      </div>
+
+      <div id="lb-members-list"></div>
+
+      <button type="button" class="lb-add-member-btn" id="lb-add-member">
+        + Add Family Member
+      </button>
+
+      <!-- ── CONSENT & AGREEMENT ── -->
+      <div class="lb-section-divider">Consent & Agreement</div>
+
+      <div class="lb-field lb-agreement">
+        <label class="lb-checkbox-label">
+          <input type="checkbox" id="lb-consent" name="contact_consent" required aria-required="true" />
+          <span>I consent to being contacted via WhatsApp and email with updates about the Likhan Bhagti Samgam. <span aria-hidden="true">*</span></span>
+        </label>
+        <span class="lb-field-error" id="lb-consent-error" role="alert"></span>
+      </div>
+
       <div class="lb-field lb-agreement">
         <label class="lb-checkbox-label lb-agree-label">
           <input type="checkbox" id="lb-agree" name="agreed" required aria-required="true" />
@@ -117,8 +205,8 @@
       <div class="lb-success" id="lb-success" hidden role="status" aria-live="polite">
         <div class="lb-success-icon" aria-hidden="true">✓</div>
         <p class="lb-success-title" data-en="You're registered!" data-pa="ਤੁਸੀਂ ਰਜਿਸਟਰ ਹੋ ਗਏ ਹੋ!">You're registered!</p>
-        <p data-en="Waheguru bless you. We'll be in touch closer to the event." data-pa="ਵਾਹਿਗੁਰੂ ਤੁਹਾਡੇ ਤੇ ਮਿਹਰ ਕਰੇ। ਸਮਾਗਮ ਤੋਂ ਪਹਿਲਾਂ ਅਸੀਂ ਤੁਹਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰਾਂਗੇ।">
-          Waheguru bless you. We'll be in touch closer to the event.
+        <p data-en="Waheguru bless you. We'll be in touch via WhatsApp closer to the event." data-pa="ਵਾਹਿਗੁਰੂ ਤੁਹਾਡੇ ਤੇ ਮਿਹਰ ਕਰੇ। ਸਮਾਗਮ ਤੋਂ ਪਹਿਲਾਂ ਅਸੀਂ ਵਟਸਐਪ ਰਾਹੀਂ ਸੰਪਰਕ ਕਰਾਂਗੇ।">
+          Waheguru bless you. We'll be in touch via WhatsApp closer to the event.
         </p>
       </div>
 
@@ -210,6 +298,102 @@
 
   const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
+  // ── Age group + simran auto-map ──────────────────────────────────────────
+  const AGE_MAP = [
+    { max: 6,   group: '6_under', label: '6 & under',  simran: 5500  },
+    { max: 9,   group: '7_9',     label: '7–9 years',  simran: 7500  },
+    { max: 12,  group: '9_12',    label: '9–12 years', simran: 12000 },
+    { max: 15,  group: '13_15',   label: '13–15 years',simran: 15000 },
+    { max: 20,  group: '16_20',   label: '16–20 years',simran: 20000 },
+    { max: 999, group: '21_above',label: '21 & above', simran: 25000 },
+  ];
+  const SIMRAN_LABELS = {
+    5500: '5,500 times', 7500: '7,500 times', 12000: '12,000 times',
+    15000: '15,000 times', 20000: '20,000 times', 25000: '25,000 times',
+  };
+
+  function getGroupForAge(age) {
+    return AGE_MAP.find(r => age <= r.max) || AGE_MAP[AGE_MAP.length - 1];
+  }
+
+  // ── Auto-fill age group + simran when age is entered ────────────────────
+  const ageInput    = document.getElementById('lb-age-exact');
+  const ageSelect   = document.getElementById('lb-age');
+  const simranSelect = document.getElementById('lb-simran');
+  const parentField = document.getElementById('lb-parent-field');
+  const parentInput = document.getElementById('lb-parent');
+
+  const ageGroupDisplay = document.getElementById('lb-age-group-display');
+
+  ageInput.addEventListener('input', () => {
+    const age = parseInt(ageInput.value);
+    if (!age || age < 1) {
+      ageGroupDisplay.textContent = 'Enter age to auto-fill';
+      return;
+    }
+    const { group, label, simran } = getGroupForAge(age);
+    ageSelect.value    = group;
+    simranSelect.value = simran;
+    ageGroupDisplay.textContent = `${label} — ${SIMRAN_LABELS[simran]}`;
+    parentField.hidden   = age > 18;
+    parentInput.required = age <= 18;
+  });
+
+  // ── Family members ───────────────────────────────────────────────────────
+  let memberCount = 0;
+  const membersList = document.getElementById('lb-members-list');
+
+  document.getElementById('lb-add-member').addEventListener('click', () => {
+    memberCount++;
+    const idx = memberCount;
+    const card = document.createElement('div');
+    card.className = 'lb-member-card';
+    card.id = `lb-member-${idx}`;
+    card.innerHTML = `
+      <div class="lb-member-header">
+        <span>Family Member ${idx}</span>
+        <button type="button" class="lb-member-remove" aria-label="Remove member ${idx}">✕</button>
+      </div>
+      <div class="lb-row">
+        <div class="lb-field">
+          <label for="lb-m${idx}-name">Full Name *</label>
+          <input type="text" id="lb-m${idx}-name" required placeholder="e.g. Simran Kaur" />
+          <span class="lb-field-error" id="lb-m${idx}-name-error" role="alert"></span>
+        </div>
+        <div class="lb-field">
+          <label for="lb-m${idx}-age">Age *</label>
+          <input type="number" id="lb-m${idx}-age" required min="1" max="120" placeholder="e.g. 8" />
+          <span class="lb-field-error" id="lb-m${idx}-age-error" role="alert"></span>
+        </div>
+      </div>
+      <div class="lb-field">
+        <label>Age Group & Target</label>
+        <p class="lb-member-autotext" id="lb-m${idx}-info">Enter age above to auto-fill</p>
+      </div>`;
+    membersList.appendChild(card);
+
+    card.querySelector('.lb-member-remove').addEventListener('click', () => card.remove());
+    card.querySelector(`#lb-m${idx}-age`).addEventListener('input', (e) => {
+      const a = parseInt(e.target.value);
+      const info = document.getElementById(`lb-m${idx}-info`);
+      if (!a || a < 1) { info.textContent = 'Enter age above to auto-fill'; return; }
+      const { simran } = getGroupForAge(a);
+      info.textContent = `${SIMRAN_LABELS[simran]}`;
+    });
+  });
+
+  // ── Duplicate phone check ────────────────────────────────────────────────
+  const phoneInput = document.getElementById('lb-phone');
+  const dupWarn    = document.getElementById('lb-phone-dup');
+
+  phoneInput.addEventListener('blur', async () => {
+    const phone = phoneInput.value.trim();
+    if (phone.length < 7) return;
+    const { data } = await sb.rpc('check_lb_phone_exists', { p_phone: phone });
+    dupWarn.hidden = !data;
+  });
+
+  // ── Validation ───────────────────────────────────────────────────────────
   const form      = document.getElementById('lb-form');
   const submitBtn = document.getElementById('lb-submit');
   const submitLbl = document.getElementById('lb-submit-label');
@@ -217,34 +401,57 @@
   const successEl = document.getElementById('lb-success');
   const errorEl   = document.getElementById('lb-error-msg');
 
-  function validateField(input, errorId, check, msg) {
-    const err = document.getElementById(errorId);
-    if (!check(input.value)) {
-      input.classList.add('invalid');
-      err.textContent = msg;
-      return false;
-    }
-    input.classList.remove('invalid');
-    err.textContent = '';
-    return true;
+  function vf(id, errId, check, msg) {
+    const el  = document.getElementById(id);
+    const err = document.getElementById(errId);
+    const ok  = check(el.value);
+    el.classList.toggle('invalid', !ok);
+    err.textContent = ok ? '' : msg;
+    return ok;
   }
 
   function validate() {
-    const nameOk     = validateField(document.getElementById('lb-name'),      'lb-name-error',      v => v.trim().length >= 2, 'Please enter your full name.');
-    const fatherOk   = validateField(document.getElementById('lb-father'),    'lb-father-error',    v => v.trim().length >= 2, "Please enter your father's name.");
-    const ageExactOk = validateField(document.getElementById('lb-age-exact'), 'lb-age-exact-error', v => v.trim() !== '' && +v >= 1 && +v <= 120, 'Please enter a valid age.');
-    const ageOk      = validateField(document.getElementById('lb-age'),       'lb-age-error',       v => v !== '', 'Please select your age group.');
-    const phoneOk    = validateField(document.getElementById('lb-phone'),     'lb-phone-error',     v => /^[\d\s\-+().]{7,}$/.test(v.trim()), 'Please enter a valid phone number.');
-    const emailEl    = document.getElementById('lb-email');
-    const emailOk    = !emailEl.value.trim() || validateField(emailEl, 'lb-email-error', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()), 'Please enter a valid email address.');
-    const addressOk  = validateField(document.getElementById('lb-address'),   'lb-address-error',   v => v.trim().length >= 5, 'Please enter your full address.');
-    const agreeEl    = document.getElementById('lb-agree');
-    const agreeErr   = document.getElementById('lb-agree-error');
-    const agreeOk    = agreeEl.checked;
+    const age    = parseInt(ageInput.value);
+    const nameOk    = vf('lb-name',      'lb-name-error',     v => v.trim().length >= 2, 'Please enter your full name.');
+    const ageOk     = vf('lb-age-exact', 'lb-age-exact-error',v => v.trim() !== '' && +v >= 1 && +v <= 120, 'Please enter a valid age.');
+    const simranOk  = vf('lb-simran',    'lb-simran-error',   v => v !== '', 'Simran target is required.');
+    const parentOk  = age <= 18
+      ? vf('lb-parent', 'lb-parent-error', v => v.trim().length >= 2, 'Please enter a parent or guardian name.')
+      : true;
+    const phoneOk   = vf('lb-phone',  'lb-phone-error',  v => /^[\d\s\-+().]{7,}$/.test(v.trim()), 'Please enter a valid WhatsApp number.');
+    const emailOk   = vf('lb-email',  'lb-email-error',  v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()), 'Please enter a valid email.');
+    const cityOk    = vf('lb-city',   'lb-city-error',   v => v.trim().length >= 2, 'Please enter your city.');
+    const provOk    = vf('lb-province','lb-province-error',v => v.trim().length >= 1, 'Please enter your province.');
+    const countryOk = vf('lb-country','lb-country-error', v => v.trim().length >= 2, 'Please enter your country.');
+
+    const consentEl  = document.getElementById('lb-consent');
+    const consentErr = document.getElementById('lb-consent-error');
+    const consentOk  = consentEl.checked;
+    consentErr.textContent = consentOk ? '' : 'Please provide your consent to continue.';
+
+    const agreeEl  = document.getElementById('lb-agree');
+    const agreeErr = document.getElementById('lb-agree-error');
+    const agreeOk  = agreeEl.checked;
     agreeErr.textContent = agreeOk ? '' : 'You must agree to the instructions to register.';
-    return nameOk && fatherOk && ageExactOk && ageOk && phoneOk && emailOk && addressOk && agreeOk;
+
+    // Validate family members
+    let membersOk = true;
+    membersList.querySelectorAll('.lb-member-card').forEach((card, i) => {
+      const n = i + 1;
+      const nameEl = card.querySelector(`[id$="-name"]`);
+      const ageEl  = card.querySelector(`[id$="-age"]`);
+      const nameErrEl = card.querySelector(`[id$="-name-error"]`);
+      const ageErrEl  = card.querySelector(`[id$="-age-error"]`);
+      if (!nameEl.value.trim()) { nameEl.classList.add('invalid'); nameErrEl.textContent = 'Required'; membersOk = false; }
+      else { nameEl.classList.remove('invalid'); nameErrEl.textContent = ''; }
+      if (!ageEl.value || +ageEl.value < 1) { ageEl.classList.add('invalid'); ageErrEl.textContent = 'Required'; membersOk = false; }
+      else { ageEl.classList.remove('invalid'); ageErrEl.textContent = ''; }
+    });
+
+    return nameOk && ageOk && simranOk && parentOk && phoneOk && emailOk && cityOk && provOk && countryOk && consentOk && agreeOk && membersOk;
   }
 
+  // ── Submit ───────────────────────────────────────────────────────────────
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -260,35 +467,50 @@
     spinner.hidden     = false;
     errorEl.hidden     = true;
 
+    const age = parseInt(ageInput.value);
+    const { group } = getGroupForAge(age);
+
     const payload = {
-      full_name:   document.getElementById('lb-name').value.trim(),
-      father_name: document.getElementById('lb-father').value.trim(),
-      age:         parseInt(document.getElementById('lb-age-exact').value),
-      age_group:   document.getElementById('lb-age').value,
-      phone:       document.getElementById('lb-phone').value.trim(),
-      is_whatsapp: document.getElementById('lb-whatsapp').checked,
-      email:       document.getElementById('lb-email').value.trim() || null,
-      address:     document.getElementById('lb-address').value.trim(),
-      message:     document.getElementById('lb-message').value.trim() || null,
+      full_name:       document.getElementById('lb-name').value.trim(),
+      age:             age,
+      age_group:       group,
+      simran_times:    parseInt(simranSelect.value),
+      parent_name:     age <= 18 ? document.getElementById('lb-parent').value.trim() : null,
+      phone:           phoneInput.value.trim(),
+      email:           document.getElementById('lb-email').value.trim(),
+      city:            document.getElementById('lb-city').value.trim(),
+      province:        document.getElementById('lb-province').value.trim(),
+      country:         document.getElementById('lb-country').value.trim(),
+      contact_consent: document.getElementById('lb-consent').checked,
     };
 
-    const { error } = await sb.from('likhanbhagti_signups').insert([payload]);
+    const { data: signup, error } = await sb.from('likhanbhagti_signups').insert([payload]).select('id').single();
+
+    if (error) {
+      submitBtn.disabled = false;
+      submitLbl.hidden   = false;
+      spinner.hidden     = true;
+      errorEl.textContent = 'Something went wrong. Please try again or call 778-928-1469.';
+      errorEl.hidden = false;
+      return;
+    }
+
+    // Insert family members if any
+    const members = [];
+    membersList.querySelectorAll('.lb-member-card').forEach(card => {
+      const nameEl = card.querySelector(`[id$="-name"]`);
+      const ageEl  = card.querySelector(`[id$="-age"]`);
+      const a = parseInt(ageEl.value);
+      const { group: mg, simran: ms } = getGroupForAge(a);
+      members.push({ signup_id: signup.id, full_name: nameEl.value.trim(), age: a, age_group: mg, simran_times: ms });
+    });
+    if (members.length) await sb.from('likhanbhagti_members').insert(members);
 
     submitBtn.disabled = false;
     submitLbl.hidden   = false;
     spinner.hidden     = true;
-
-    if (error) {
-      errorEl.textContent = 'Something went wrong. Please try again or call 778-928-1469.';
-      errorEl.hidden = false;
-    } else {
-      form.hidden      = true;
-      successEl.hidden = false;
-      const lang = getLang();
-      successEl.querySelectorAll('[data-en]').forEach(el => {
-        el.textContent = lang === 'pa' ? el.dataset.pa : el.dataset.en;
-      });
-    }
+    form.hidden        = true;
+    successEl.hidden   = false;
   });
 </script>
 </body>
