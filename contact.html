@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="apple-touch-icon" href="/assets/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact — Chaupehra Baba Deep Singh Ji</title>
   <meta name="description" content="Get in touch with Chaupehra Baba Deep Singh Ji in Surrey, BC." />
@@ -128,7 +130,7 @@
     <div class="contact-location-col">
       <h2 class="section-title" data-en="Location" data-pa="ਸਥਾਨ">Location</h2>
       <div class="location-card card">
-        <div class="location-icon">🕌</div>
+        <div class="location-icon">🪯</div>
         <address class="location-address">
           <strong>Chaupehra Baba Deep Singh Ji</strong><br />
           14210/14212 88 Ave<br />
@@ -202,6 +204,24 @@
     if (!phone)  { showError('phone-error',  'Please enter your phone number.'); valid = false; }
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       showError('email-error', 'Please enter a valid email address.'); valid = false;
+    } else {
+      const emailTypos = {
+        'ymail.com': 'gmail.com', 'gmal.com': 'gmail.com', 'gmial.com': 'gmail.com',
+        'gmali.com': 'gmail.com', 'gmail.co': 'gmail.com', 'gmail.con': 'gmail.com',
+        'gnail.com': 'gmail.com', 'gamil.com': 'gmail.com',
+        'hotmial.com': 'hotmail.com', 'hotmal.com': 'hotmail.com', 'hotnail.com': 'hotmail.com',
+        'hotmail.co': 'hotmail.com', 'hotmail.con': 'hotmail.com',
+        'outlok.com': 'outlook.com', 'outlock.com': 'outlook.com', 'otlook.com': 'outlook.com',
+        'yhoo.com': 'yahoo.com', 'yahooo.com': 'yahoo.com', 'yaho.com': 'yahoo.com',
+        'yahoo.co': 'yahoo.com', 'yahoo.con': 'yahoo.com',
+        'iclod.com': 'icloud.com', 'iclould.com': 'icloud.com',
+      };
+      const domain = email.split('@')[1]?.toLowerCase();
+      const fix = emailTypos[domain];
+      if (fix) {
+        const suggested = email.replace(/@.+$/, '@' + fix);
+        showError('email-error', `Did you mean ${suggested}?`); valid = false;
+      }
     }
     if (!reason) { showError('reason-error', 'Please select a reason.'); valid = false; }
     return valid;

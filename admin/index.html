@@ -1,72 +1,139 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="apple-touch-icon" href="../assets/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin — Chaupehra BDSJ</title>
+  <title>Admin — Chaupehra Baba Deep Singh Ji</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☬</text></svg>" />
-  <link rel="stylesheet" href="/admin/admin.css" />
+  <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
 
-<!-- ── LOGIN ── -->
+<!-- ══════════════════════════════════════
+     LOGIN SCREEN
+═══════════════════════════════════════ -->
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
     <div class="login-logo">☬</div>
     <h1>Chaupehra Admin</h1>
-    <p>Sign in to manage events, photos, and bookings.</p>
-    <form id="loginForm">
-      <input type="email" id="loginEmail" placeholder="Admin email" required />
-      <input type="password" id="loginPassword" placeholder="Password" required />
-      <button type="submit" class="btn-primary" id="loginBtn">Sign In</button>
-      <p class="login-error" id="loginError"></p>
+    <p class="login-sub">Sign in to manage events, photos, and inquiries.</p>
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" autocomplete="email" required />
+      </div>
+      <div class="field">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" autocomplete="current-password" required />
+      </div>
+      <button type="submit" class="btn-primary btn-block" id="loginBtn">Sign In</button>
+      <p class="login-error hidden" id="loginError" role="alert"></p>
     </form>
   </div>
 </div>
 
-<!-- ── DASHBOARD ── -->
+<!-- ══════════════════════════════════════
+     DASHBOARD
+═══════════════════════════════════════ -->
 <div class="dashboard hidden" id="dashboard">
 
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-      <span>☬</span>
-      <span>Admin</span>
+      <span class="sidebar-khanda">☬</span>
+      <span class="sidebar-title">Admin</span>
     </div>
-    <nav class="sidebar-nav">
-      <button class="nav-item active" data-tab="events">📅 Events</button>
-      <button class="nav-item" data-tab="gallery">📷 Gallery</button>
-      <button class="nav-item" data-tab="bookings">📋 Bookings</button>
-      <button class="nav-item" data-tab="dates">🗓️ Available Dates</button>
+    <nav class="sidebar-nav" role="navigation">
+      <button class="nav-item active" data-tab="events">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Events
+      </button>
+      <button class="nav-item" data-tab="inquiries">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Inquiries
+        <span class="nav-badge hidden" id="inquiries-badge">0</span>
+      </button>
+      <button class="nav-item" data-tab="signups">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Signups
+        <span class="nav-badge hidden" id="signups-badge">0</span>
+      </button>
+      <button class="nav-item" data-tab="gallery">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Gallery
+      </button>
     </nav>
     <div class="sidebar-footer">
-      <a href="../index.html" class="btn-outline" target="_blank">View Site ↗</a>
+      <a href="../index.html" class="btn-outline" target="_blank" rel="noopener">View Site ↗</a>
       <button class="btn-outline" id="logoutBtn">Sign Out</button>
     </div>
   </aside>
 
+  <!-- Mobile sidebar toggle -->
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+
   <main class="main-content">
 
-    <!-- ── EVENTS TAB ── -->
+    <!-- ══ EVENTS TAB ══ -->
     <section class="tab-panel active" id="tab-events">
       <div class="panel-header">
         <h2>Events</h2>
         <button class="btn-primary" id="addEventBtn">+ Add Event</button>
       </div>
 
-      <!-- Event form (hidden by default) -->
+      <!-- Event form -->
       <div class="form-card hidden" id="eventForm">
         <h3 id="eventFormTitle">New Event</h3>
         <input type="hidden" id="eventId" />
+
         <div class="form-row">
           <div class="field">
-            <label for="evTitle">Title *</label>
-            <input type="text" id="evTitle" required />
+            <label for="evName">Event Name *</label>
+            <div class="input-with-datalist">
+              <input type="text" id="evName" list="ev-presets" required autocomplete="off" placeholder="Type or choose a preset…" />
+              <datalist id="ev-presets">
+                <option value="Chaupehra Sahib" />
+                <option value="Akhand Path" />
+                <option value="Akhand Path Bhog" />
+                <option value="Sehaj Path" />
+                <option value="Sehaj Path Bhog" />
+                <option value="Kirtan Darbar" />
+                <option value="Seva Day" />
+                <option value="Simran Smagam" />
+                <option value="Gurdwara Program" />
+                <option value="Gurpurab — Guru Nanak Dev Ji" />
+                <option value="Gurpurab — Guru Gobind Singh Ji" />
+                <option value="Shaheedi Diwas — Baba Deep Singh Ji" />
+                <option value="Baisakhi — Khalsa Sajna Diwas" />
+              </datalist>
+            </div>
           </div>
+          <div class="field field--sm">
+            <label class="checkbox-label mt-auto">
+              <input type="checkbox" id="evGurpurab" />
+              Gurpurab (yearly)
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="evRecurring" />
+              Recurring yearly
+            </label>
+          </div>
+        </div>
+
+        <div class="form-row">
           <div class="field">
             <label for="evDate">Date *</label>
             <input type="date" id="evDate" required />
           </div>
+          <div class="field">
+            <label for="evEndDate">End Date <span class="label-hint">(multi-day)</span></label>
+            <input type="date" id="evEndDate" />
+          </div>
         </div>
+
         <div class="form-row">
           <div class="field">
             <label for="evStart">Start Time</label>
@@ -77,138 +144,146 @@
             <input type="time" id="evEnd" />
           </div>
         </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="evPath">Path Type</label>
+            <select id="evPath">
+              <option value="">— None —</option>
+              <option>Akhand Path</option>
+              <option>Sehaj Path</option>
+              <option>Sukhmani Sahib Path</option>
+              <option>Japji Sahib Path</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="evKirtani">Kirtani / Special Guest</label>
+            <input type="text" id="evKirtani" placeholder="e.g. Bhai Gurpreet Singh Ji" />
+          </div>
+        </div>
+
         <div class="field">
-          <label for="evVenue">Venue</label>
-          <input type="text" id="evVenue" placeholder="Gurdwara Nanaksar, Surrey, BC" />
+          <label for="evNotes">Internal Notes</label>
+          <textarea id="evNotes" rows="2" placeholder="Not shown to public"></textarea>
         </div>
-        <div class="field">
-          <label for="evDesc">Description</label>
-          <textarea id="evDesc" rows="3"></textarea>
-        </div>
-        <div class="field-row">
-          <label class="checkbox-label">
-            <input type="checkbox" id="evPublished" checked /> Published (visible on site)
-          </label>
-        </div>
+
         <div class="form-actions">
           <button class="btn-primary" id="saveEventBtn">Save Event</button>
           <button class="btn-outline" id="cancelEventBtn">Cancel</button>
+          <p class="form-status" id="eventStatus" role="status"></p>
         </div>
-        <p class="form-status" id="eventStatus"></p>
       </div>
 
+      <!-- Events table -->
       <div class="table-wrap">
-        <table class="data-table" id="eventsTable">
+        <table class="data-table">
           <thead>
             <tr>
               <th>Date</th>
-              <th>Title</th>
-              <th>Venue</th>
-              <th>Status</th>
+              <th>Event</th>
+              <th>Time</th>
+              <th>Path / Kirtani</th>
+              <th>Type</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody id="eventsBody">
-            <tr><td colspan="5" class="loading">Loading events…</td></tr>
+            <tr><td colspan="6" class="loading-cell">Loading events…</td></tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <!-- ── GALLERY TAB ── -->
-    <section class="tab-panel hidden" id="tab-gallery">
+    <!-- ══ INQUIRIES TAB ══ -->
+    <section class="tab-panel hidden" id="tab-inquiries">
       <div class="panel-header">
-        <h2>Gallery</h2>
-        <label class="btn-primary upload-label">
-          + Upload Photos
-          <input type="file" id="photoUpload" multiple accept="image/*" style="display:none" />
-        </label>
-      </div>
-      <p class="upload-status" id="uploadStatus"></p>
-      <div class="gallery-admin-grid" id="galleryAdminGrid">
-        <div class="loading">Loading photos…</div>
-      </div>
-    </section>
-
-    <!-- ── BOOKINGS TAB ── -->
-    <section class="tab-panel hidden" id="tab-bookings">
-      <div class="panel-header">
-        <h2>Bookings</h2>
+        <h2>Inquiries</h2>
         <div class="filter-row">
-          <select id="bookingFilter">
+          <select id="inquiryFilter" class="filter-select">
             <option value="all">All</option>
-            <option value="pending">Pending</option>
-            <option value="confirmed">Confirmed</option>
-            <option value="declined">Declined</option>
+            <option value="new">New</option>
+            <option value="read">Read</option>
+            <option value="responded">Responded</option>
+          </select>
+          <select id="inquiryReason" class="filter-select">
+            <option value="all">All Reasons</option>
+            <option value="volunteer">Volunteer</option>
+            <option value="book_event">Book Event</option>
+            <option value="donate">Donate</option>
+            <option value="general">General</option>
+            <option value="other">Other</option>
           </select>
         </div>
       </div>
-      <div class="table-wrap">
-        <table class="data-table" id="bookingsTable">
-          <thead>
-            <tr>
-              <th>Date Requested</th>
-              <th>Name</th>
-              <th>Email / Phone</th>
-              <th>Event Type</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="bookingsBody">
-            <tr><td colspan="6" class="loading">Loading bookings…</td></tr>
-          </tbody>
-        </table>
+
+      <div class="inquiries-list" id="inquiriesList">
+        <div class="loading-cell">Loading inquiries…</div>
       </div>
     </section>
 
-    <!-- ── AVAILABLE DATES TAB ── -->
-    <section class="tab-panel hidden" id="tab-dates">
+    <!-- ══ SIGNUPS TAB ══ -->
+    <section class="tab-panel hidden" id="tab-signups">
       <div class="panel-header">
-        <h2>Available Dates</h2>
-        <p style="font-size:0.9rem;color:var(--text-sub);">Set which dates can be booked on the website.</p>
+        <h2>Waheguru Likhan Bhagti — Signups</h2>
+        <div class="filter-row">
+          <input type="text" id="signupSearch" class="filter-select" placeholder="Search name, phone, city…" style="min-width:200px;" />
+          <select id="signupAgeFilter" class="filter-select">
+            <option value="all">All Age Groups</option>
+            <option value="6_under">6 &amp; under</option>
+            <option value="7_9">7–9 years</option>
+            <option value="9_12">9–12 years</option>
+            <option value="13_15">13–15 years</option>
+            <option value="16_20">16–20 years</option>
+            <option value="21_above">21 &amp; above</option>
+          </select>
+          <button class="btn-outline" id="signupExportBtn">⬇ Export CSV</button>
+        </div>
       </div>
-
-      <div class="dates-add-form form-card">
-        <h3>Add / Update a Date</h3>
-        <div class="form-row">
-          <div class="field">
-            <label for="newDate">Date *</label>
-            <input type="date" id="newDate" required />
-          </div>
-          <div class="field">
-            <label for="dateAvail">Status</label>
-            <select id="dateAvail">
-              <option value="true">Available</option>
-              <option value="false">Unavailable / Blocked</option>
-            </select>
-          </div>
-        </div>
-        <div class="field">
-          <label for="dateNotes">Notes (internal, not shown to public)</label>
-          <input type="text" id="dateNotes" placeholder="e.g. Booked for private event" />
-        </div>
-        <div class="form-actions">
-          <button class="btn-primary" id="saveDateBtn">Save Date</button>
-        </div>
-        <p class="form-status" id="dateStatus"></p>
-      </div>
-
       <div class="table-wrap">
-        <table class="data-table" id="datesTable">
+        <table class="data-table" id="signupsTable">
           <thead>
-            <tr><th>Date</th><th>Status</th><th>Notes</th><th>Actions</th></tr>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Age / Group</th>
+              <th>Simran Target</th>
+              <th>WhatsApp</th>
+              <th>Email</th>
+              <th>City</th>
+              <th>Registered</th>
+              <th>Family</th>
+            </tr>
           </thead>
-          <tbody id="datesBody">
-            <tr><td colspan="4" class="loading">Loading dates…</td></tr>
+          <tbody id="signupsBody">
+            <tr><td colspan="9" class="loading-cell">Loading signups…</td></tr>
           </tbody>
         </table>
+      </div>
+      <p class="text-muted" id="signupsCount" style="padding:var(--space-3) 0;font-size:0.85rem;"></p>
+    </section>
+
+    <!-- ══ GALLERY TAB ══ -->
+    <section class="tab-panel hidden" id="tab-gallery">
+      <div class="panel-header">
+        <h2>Photo Gallery</h2>
+        <label class="btn-primary upload-label" for="photoUpload">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
+          Upload Photos
+          <input type="file" id="photoUpload" multiple accept="image/*" style="display:none" />
+        </label>
+      </div>
+      <div class="upload-progress hidden" id="uploadProgress">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <p id="uploadStatus" class="upload-status-text"></p>
+      </div>
+      <div class="gallery-admin-grid" id="galleryAdminGrid">
+        <div class="loading-cell">Loading photos…</div>
       </div>
     </section>
 
   </main>
 </div>
 
-<script type="module" src="/admin/admin.js"></script>
+<script type="module" src="admin.js"></script>
 </body>
 </html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="apple-touch-icon" href="/assets/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy & Consent — Chaupehra Baba Deep Singh Ji</title>
+  <meta name="description" content="Contact consent and privacy notice for the 5th Annual Waheguru Likhan Bhagti Samgam registration." />
+  <link rel="stylesheet" href="css/global.css" />
+  <style>
+    .prv-hero {
+      padding: var(--space-12) 0 var(--space-8);
+    }
+    .prv-event-tag {
+      display: inline-block;
+      font-size: var(--text-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--saffron);
+      margin-bottom: var(--space-3);
+    }
+    .prv-subtitle {
+      color: var(--muted);
+      font-size: var(--text-sm);
+      margin-top: var(--space-2);
+      line-height: 1.6;
+    }
+    .prv-back {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--muted);
+      font-size: var(--text-sm);
+      text-decoration: none;
+      margin-bottom: var(--space-8);
+      transition: color var(--transition);
+    }
+    .prv-back:hover { color: var(--saffron); }
+
+    /* Cards */
+    .prv-cards {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      padding-bottom: var(--space-16);
+    }
+    .prv-card {
+      background: var(--navy-mid);
+      border: 1px solid var(--navy-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .prv-card-trigger {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: var(--space-6) var(--space-7);
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      cursor: pointer;
+      text-align: left;
+    }
+    .prv-card-trigger:hover { background: rgba(255,153,51,0.04); }
+    .prv-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,153,51,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--saffron);
+    }
+    .prv-card-meta { flex: 1; }
+    .prv-card-title {
+      font-size: var(--text-base);
+      font-weight: 700;
+      color: var(--off-white);
+      display: block;
+    }
+    .prv-card-desc {
+      font-size: var(--text-sm);
+      color: var(--muted);
+      margin-top: 2px;
+      display: block;
+    }
+    .prv-card-chevron {
+      flex-shrink: 0;
+      color: var(--muted);
+      transition: transform 0.25s ease;
+    }
+    .prv-card[open] .prv-card-chevron { transform: rotate(180deg); }
+    .prv-card[open] .prv-card-trigger { border-bottom: 1px solid var(--navy-light); }
+
+    /* Body */
+    .prv-card-body {
+      padding: var(--space-6) var(--space-7);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+    .prv-block { display: flex; flex-direction: column; gap: var(--space-2); }
+    .prv-block-label {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--saffron);
+    }
+    .prv-block p {
+      font-size: var(--text-sm);
+      color: var(--muted);
+      line-height: 1.75;
+      margin: 0;
+    }
+    .prv-block p strong { color: var(--off-white); }
+    .prv-block ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    .prv-block ul li {
+      display: flex;
+      gap: var(--space-3);
+      font-size: var(--text-sm);
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .prv-block ul li::before {
+      content: '✦';
+      color: var(--saffron);
+      flex-shrink: 0;
+      font-size: 0.7em;
+      margin-top: 4px;
+    }
+    .prv-contact-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      background: var(--navy);
+      border: 1px solid var(--navy-light);
+      border-radius: var(--radius);
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-sm);
+      color: var(--off-white);
+      text-decoration: none;
+      font-weight: 600;
+      width: fit-content;
+    }
+    .prv-contact-chip:hover { border-color: var(--saffron); color: var(--saffron); }
+    .prv-attestation {
+      background: rgba(255,153,51,0.06);
+      border-left: 3px solid var(--saffron);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--text-xs);
+      color: var(--muted);
+      font-style: italic;
+      line-height: 1.7;
+    }
+    .prv-divider {
+      border: none;
+      border-top: 1px solid var(--navy-light);
+    }
+
+    @media (max-width: 640px) {
+      .prv-card-trigger { padding: var(--space-4) var(--space-5); }
+      .prv-card-body { padding: var(--space-4) var(--space-5); }
+    }
+  </style>
+</head>
+<body>
+
+<div id="nav-placeholder"></div>
+
+<div class="page-title-band">
+  <div class="container">
+    <div class="page-title-bilingual">
+      <h1 class="page-title-primary">Privacy &amp; Consent</h1>
+      <p class="page-title-secondary gurmukhi">ਗੋਪਨੀਯਤਾ ਅਤੇ ਸਹਿਮਤੀ</p>
+    </div>
+  </div>
+</div>
+
+<div class="prv-hero">
+  <div class="container" style="max-width:680px;">
+    <a href="likhanbhagti.html" class="prv-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Registration Form
+    </a>
+    <span class="prv-event-tag">5th Annual Waheguru Likhan Bhagti Samgam</span>
+    <p class="prv-subtitle">Chaupehra Baba Deep Singh Ji · Surrey, BC · Award Ceremony: Sunday, September 25, 2026 · 4:30 – 6:00 PM</p>
+    <p class="prv-subtitle" style="margin-top:var(--space-3);">Click a section below to read the full notice.</p>
+  </div>
+</div>
+
+<div class="container" style="max-width:680px; padding-bottom: var(--space-4);">
+  <div class="prv-cards">
+
+    <!-- ── CONTACT CONSENT ── -->
+    <details class="prv-card" id="contact-consent">
+      <summary class="prv-card-trigger" style="list-style:none;">
+        <div class="prv-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.12 1.18 2 2 0 012.11 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/></svg>
+        </div>
+        <div class="prv-card-meta">
+          <span class="prv-card-title">Contact Consent</span>
+          <span class="prv-card-desc">How we use your WhatsApp &amp; email to reach you</span>
+        </div>
+        <svg class="prv-card-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+
+      <div class="prv-card-body">
+
+        <div class="prv-block">
+          <span class="prv-block-label">What you're agreeing to</span>
+          <p>By providing your WhatsApp number and email on this form, you give us permission to contact you using those details.</p>
+        </div>
+
+        <hr class="prv-divider" />
+
+        <div class="prv-block">
+          <span class="prv-block-label">How we'll reach you</span>
+          <p>We will contact you by <strong>WhatsApp</strong> and <strong>email</strong>.</p>
+        </div>
+
+        <div class="prv-block">
+          <span class="prv-block-label">What we'll contact you about</span>
+          <ul>
+            <li>Confirming that your registration was received</li>
+            <li>Sharing event details, the notebook submission deadline, and ceremony information</li>
+            <li>Sending reminders before the submission date of September 13, 2026 and the award ceremony</li>
+            <li>Letting you know about any changes or updates to the event</li>
+          </ul>
+          <p>We will only contact you about the Waheguru Likhan Bhagti Samgam. We will not use your details for anything you have not agreed to.</p>
+        </div>
+
+        <hr class="prv-divider" />
+
+        <div class="prv-block">
+          <span class="prv-block-label">Your choices</span>
+          <p>You can withdraw your consent at any time. Contact us on WhatsApp and we will remove you from our contact list.</p>
+        </div>
+
+        <div class="prv-block">
+          <span class="prv-block-label">Your privacy</span>
+          <p>We will never sell, rent, or trade your contact information. We will not share it with anyone outside our organization unless the law requires us to.</p>
+        </div>
+
+        <div class="prv-block">
+          <span class="prv-block-label">Family members &amp; under 19s</span>
+          <p>If you add family members, you confirm you have their permission and are the parent or guardian of anyone under 19. A parent or guardian should read this and consent on behalf of participants under 19.</p>
+        </div>
+
+        <hr class="prv-divider" />
+
+        <div class="prv-block">
+          <span class="prv-block-label">Questions? Contact us</span>
+          <a href="https://wa.me/17789281469" target="_blank" rel="noopener" class="prv-contact-chip">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Amrinder Singh · 778-928-1469
+          </a>
+        </div>
+
+        <div class="prv-attestation">
+          By checking the consent box on the registration form, I confirm that I have read and understood this notice and I consent to being contacted as described above.
+        </div>
+
+      </div>
+    </details>
+
+    <!-- ── DATA & PRIVACY ── -->
+    <details class="prv-card" id="data-storage">
+      <summary class="prv-card-trigger" style="list-style:none;">
+        <div class="prv-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        </div>
+        <div class="prv-card-meta">
+          <span class="prv-card-title">Privacy &amp; Data Storage</span>
+          <span class="prv-card-desc">What we collect, why, and how long we keep it · PIPA (BC)</span>
+        </div>
+        <svg class="prv-card-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+
+      <div class="prv-card-body">
+
+        <div class="prv-block">
+          <span class="prv-block-label">What we collect</span>
+          <ul>
+            <li>Full name</li>
+            <li>Age and age group</li>
+            <li>WhatsApp number</li>
+            <li>Email address</li>
+            <li>City, province or state, and country</li>
+            <li>The same details for any family members you add</li>
+          </ul>
+        </div>
+
+        <hr class="prv-divider" />
+
+        <div class="prv-block">
+          <span class="prv-block-label">Why we collect it</span>
+          <ul>
+            <li>Register you and your family for the event</li>
+            <li>Match completed notebooks to participants</li>
+            <li>Plan for participation gifts and the award ceremony</li>
+            <li>Contact you with updates by WhatsApp and email</li>
+          </ul>
+        </div>
+
+        <hr class="prv-divider" />
+
+        <div class="prv-block">
+          <span class="prv-block-label">How long we keep it</span>
+          <p>We will securely store your information for up to <strong>6 months</strong> after the award ceremony (September 25, 2026). After that, it is permanently deleted.</p>
+        </div>
+
+        <div class="prv-block">
+          <span class="prv-block-label">How we keep it safe</span>
+          <p>Your information is stored securely and is only accessible to the organizers and volunteers who need it to run the event. We take reasonable steps to protect it from loss, theft, or unauthorized access.</p>
+        </div>
+
+        <div class="prv-block">
+          <span class="prv-block-label">Sharing your information</span>
+          <p>We do not sell or share your personal information with anyone outside our organization. We will only disclose it if required to do so by law.</p>
+        </div>
+
+        <hr class="prv-divider" />
+
+        <div class="prv-block">
+          <span class="prv-block-label">Your rights</span>
+          <ul>
+            <li>Ask to see the information we hold about you</li>
+            <li>Ask us to correct it if it is wrong</li>
+            <li>Withdraw your consent and ask us to delete your information before the 6 months end</li>
+          </ul>
+        </div>
+
+        <div class="prv-block">
+          <span class="prv-block-label">Family members &amp; under 19s</span>
+          <p>If you add family members, you confirm you have their permission and are the parent or guardian of anyone under 19. A parent or guardian should read this and consent on behalf of participants under 19.</p>
+        </div>
+
+        <hr class="prv-divider" />
+
+        <div class="prv-block">
+          <span class="prv-block-label">Questions or requests</span>
+          <a href="https://wa.me/17789281469" target="_blank" rel="noopener" class="prv-contact-chip">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Amrinder Singh · 778-928-1469
+          </a>
+        </div>
+
+        <div class="prv-attestation">
+          By checking the consent box on the registration form, I confirm that I have read and understood this notice and I consent to my personal information being collected and stored as described above.
+        </div>
+
+      </div>
+    </details>
+
+  </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<script src="js/global.js"></script>
+<script>
+  // Keep chevron in sync with native <details> toggle
+  document.querySelectorAll('.prv-card').forEach(card => {
+    card.addEventListener('toggle', () => {
+      card.querySelector('.prv-card-chevron').style.transform = card.open ? 'rotate(180deg)' : '';
+    });
+  });
+  // Auto-open section if URL has hash
+  const hash = location.hash.replace('#','');
+  if (hash) { const el = document.getElementById(hash); if (el) { el.open = true; el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }
+</script>
+</body>
+</html>
