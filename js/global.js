@@ -196,6 +196,9 @@ function renderFooter() {
     </div>
     <div class="footer-bottom">
       <p>© ${new Date().getFullYear()} Chaupehra Baba Deep Singh Ji. Surrey, BC, Canada.</p>
+      <p style="margin-top:var(--space-2);font-size:var(--text-xs);color:var(--muted);">
+        <a href="privacy.html" style="color:var(--muted);text-decoration:underline;">Privacy &amp; Consent Notice</a>
+      </p>
     </div>
   </div>
 </footer>`;
@@ -217,8 +220,13 @@ function initRecurringBadge() {
 
   badges.forEach(badge => {
     if (isLive) {
-      badge.textContent = '● LIVE NOW';
-      badge.classList.add('recurring-badge--live');
+      const link = document.createElement('a');
+      link.href = 'media.html#livestream';
+      link.textContent = '● LIVE NOW';
+      link.className = badge.className + ' recurring-badge--live';
+      link.id = badge.id;
+      link.style.cssText = 'text-decoration:none;cursor:pointer;';
+      badge.replaceWith(link);
     } else {
       badge.textContent = 'Saturday & Sunday';
     }
