@@ -45,17 +45,21 @@
   <div class="hero-dots" id="hero-dots" aria-hidden="true"></div>
 </section>
 
-<!-- ── LIKHAN BHAGTI BANNER ── -->
-<a href="likhanbhagti.html" class="lb-home-banner" aria-label="Learn more and sign up for Waheguru Likhan Bhagti Samgam">
-  <div class="lb-home-banner-inner container">
-    <div class="lb-home-banner-text">
-      <span class="lb-home-banner-tag" data-en="New Event" data-pa="ਨਵਾਂ ਸਮਾਗਮ">New Event</span>
-      <p class="lb-home-banner-title" data-en="5th Annual Waheguru Likhan Bhagti Samgam" data-pa="5ਵਾਂ ਸਾਲਾਨਾ ਵਾਹਿਗੁਰੂ ਲਿਖਣ ਭਗਤੀ ਸਮਾਗਮ">5th Annual Waheguru Likhan Bhagti Samgam</p>
-      <p class="lb-home-banner-sub" data-en="Write WaheGuru's name with love · Award Ceremony: Sept 25, 2026 · Surrey, BC" data-pa="ਵਾਹਿਗੁਰੂ ਦਾ ਨਾਮ ਪਿਆਰ ਨਾਲ ਲਿਖੋ · ਇਨਾਮ ਸਮਾਰੋਹ: 25 ਸਤੰਬਰ 2026 · ਸਰੀ, ਬੀ.ਸੀ.">Write WaheGuru's name with love &nbsp;·&nbsp; Award Ceremony: Sept 25, 2026 &nbsp;·&nbsp; Surrey, BC</p>
-    </div>
-    <span class="lb-home-banner-btn" data-en="Learn More &amp; Sign Up" data-pa="ਹੋਰ ਜਾਣੋ ਅਤੇ ਰਜਿਸਟਰ ਕਰੋ">Learn More &amp; Sign Up →</span>
+<!-- ── EVENTS BANNER CAROUSEL ── -->
+<section class="events-banner" id="events-banner" aria-label="Upcoming events">
+  <div class="events-banner-track" id="events-banner-track">
+    <a href="events.html" class="events-banner-slide events-banner-slide--fallback active">
+      <div class="events-banner-inner container">
+        <div class="events-banner-text">
+          <span class="events-banner-tag" data-en="Upcoming" data-pa="ਆਉਣ ਵਾਲਾ">Upcoming</span>
+          <p class="events-banner-title" data-en="See What's Coming Up" data-pa="ਆਉਣ ਵਾਲੇ ਸਮਾਗਮ ਵੇਖੋ">See What's Coming Up</p>
+        </div>
+        <span class="events-banner-btn" data-en="View Full Schedule" data-pa="ਪੂਰਾ ਪ੍ਰੋਗਰਾਮ">View Full Schedule →</span>
+      </div>
+    </a>
   </div>
-</a>
+  <div class="events-banner-dots" id="events-banner-dots" aria-hidden="true"></div>
+</section>
 
 <!-- ── ABOUT SNIPPET ── -->
 <section class="section section--mid home-about">
@@ -248,6 +252,52 @@
     resetTimer();
   }
 
+  /* ── Events banner carousel (next 3 upcoming events) ── */
+  async function initEventsBannerCarousel() {
+    const track = document.getElementById('events-banner-track');
+    const dotsEl = document.getElementById('events-banner-dots');
+    const today = new Date().toISOString().split('T')[0];
+    const { data, error } = await sb.from('events')
+      .select('*').gte('date', today).eq('is_published', true)
+      .order('date').order('start_time').limit(3);
+    if (error || !data || !data.length) return;
+
+    const fmtD = d => new Date(d+'T00:00:00').toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'});
+    const fmtT = t => { if (!t) return ''; const [h,m] = t.split(':'); const d = new Date(); d.setHours(+h,+m); return d.toLocaleTimeString('en-CA',{hour:'numeric',minute:'2-digit',hour12:true}); };
+    track.innerHTML = data.map((ev, i) => `
+      <a href="${ev.link_url || 'events.html'}" class="events-banner-slide${i===0?' active':''}">
+        <div class="events-banner-inner container">
+          <div class="events-banner-text">
+            <span class="events-banner-tag">${ev.is_gurpurab ? 'Gurpurab' : 'Upcoming Event'}</span>
+            <p class="events-banner-title">${ev.name}</p>
+            <p class="events-banner-sub">${fmtD(ev.date)}${ev.start_time ? ' · ' + fmtT(ev.start_time) : ''} &nbsp;·&nbsp; Surrey, BC</p>
+          </div>
+          <span class="events-banner-btn">${ev.link_url ? 'Learn More & Sign Up' : 'View Details'} →</span>
+        </div>
+      </a>`).join('');
+    dotsEl.innerHTML = data.map((_, i) =>
+      `<button class="events-banner-dot${i===0?' active':''}" data-idx="${i}" aria-label="Slide ${i+1}"></button>`
+    ).join('');
+
+    if (data.length < 2) return;
+    let cur = 0;
+    const slides = track.querySelectorAll('.events-banner-slide');
+    const dots   = dotsEl.querySelectorAll('.events-banner-dot');
+    const goTo = i => {
+      slides[cur].classList.remove('active'); dots[cur].classList.remove('active');
+      cur = (i + slides.length) % slides.length;
+      slides[cur].classList.add('active'); dots[cur].classList.add('active');
+    };
+    let timer;
+    const resetTimer = () => {
+      clearInterval(timer);
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+        timer = setInterval(() => goTo(cur + 1), 6000);
+    };
+    dots.forEach(d => d.addEventListener('click', (e) => { e.preventDefault(); goTo(+d.dataset.idx); resetTimer(); }));
+    resetTimer();
+  }
+
   /* ── Upcoming events (max 3) ── */
   async function loadHomeEvents() {
     const el = document.getElementById('home-events-list');
@@ -351,6 +401,7 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     initHeroCarousel();
+    initEventsBannerCarousel();
     loadHomeEvents();
     loadMediaPreview();
     initHomeForm();
