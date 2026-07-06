@@ -268,16 +268,17 @@
       <a href="${ev.link_url || 'events.html'}" class="events-banner-slide${i===0?' active':''}">
         <div class="events-banner-inner container">
           <div class="events-banner-text">
-            <span class="events-banner-tag">${ev.is_gurpurab ? 'Gurpurab' : 'Upcoming Event'}</span>
+            <span class="events-banner-tag" data-en="${ev.is_gurpurab ? 'Gurpurab' : 'Upcoming Event'}" data-pa="${ev.is_gurpurab ? 'ਗੁਰਪੁਰਬ' : 'ਆਉਣ ਵਾਲਾ ਸਮਾਗਮ'}">${ev.is_gurpurab ? 'Gurpurab' : 'Upcoming Event'}</span>
             <p class="events-banner-title">${ev.name}</p>
-            <p class="events-banner-sub">${fmtD(ev.date)}${ev.start_time ? ' · ' + fmtT(ev.start_time) : ''} &nbsp;·&nbsp; Surrey, BC</p>
+            <p class="events-banner-sub">${fmtD(ev.date)}${ev.start_time ? ' · ' + fmtT(ev.start_time) : ''} &nbsp;·&nbsp; <span data-en="Surrey, BC" data-pa="ਸਰੀ, ਬੀ.ਸੀ.">Surrey, BC</span></p>
           </div>
-          <span class="events-banner-btn">${ev.link_url ? 'Learn More & Sign Up' : 'View Details'} →</span>
+          <span class="events-banner-btn" data-en="${ev.link_url ? 'Learn More &amp; Sign Up →' : 'View Details →'}" data-pa="${ev.link_url ? 'ਹੋਰ ਜਾਣੋ ਅਤੇ ਰਜਿਸਟਰ ਕਰੋ →' : 'ਵੇਰਵੇ ਵੇਖੋ →'}">${ev.link_url ? 'Learn More & Sign Up' : 'View Details'} →</span>
         </div>
       </a>`).join('');
     dotsEl.innerHTML = data.map((_, i) =>
       `<button class="events-banner-dot${i===0?' active':''}" data-idx="${i}" aria-label="Slide ${i+1}"></button>`
     ).join('');
+    if (typeof setLang === 'function') setLang(getLang());
 
     if (data.length < 2) return;
     let cur = 0;
