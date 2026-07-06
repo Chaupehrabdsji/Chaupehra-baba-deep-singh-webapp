@@ -5,6 +5,7 @@ supabase-config.js
 graphify-out/
 netlify.toml
 supabase/.temp/
+.claude/
 
 # Large media - host externally (YouTube/CDN), don't commit to git
 *.mp4
