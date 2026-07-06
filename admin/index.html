@@ -63,6 +63,11 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         Gallery
       </button>
+      <button class="nav-item" data-tab="errorlogs">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Error Logs
+        <span class="nav-badge hidden" id="errorlogs-badge">0</span>
+      </button>
     </nav>
     <div class="sidebar-footer">
       <a href="../index.html" class="btn-outline" target="_blank" rel="noopener">View Site ↗</a>
@@ -278,6 +283,36 @@
       </div>
       <div class="gallery-admin-grid" id="galleryAdminGrid">
         <div class="loading-cell">Loading photos…</div>
+      </div>
+    </section>
+
+    <!-- ══ ERROR LOGS TAB ══ -->
+    <section class="tab-panel hidden" id="tab-errorlogs">
+      <div class="panel-header">
+        <h2>Error Logs</h2>
+        <div class="filter-row">
+          <select id="errorSourceFilter" class="filter-select">
+            <option value="all">All Sources</option>
+          </select>
+          <button class="btn-outline" id="errorClearBtn">Clear All</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Source</th>
+              <th>Message</th>
+              <th>Details</th>
+              <th>Page</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="errorLogsBody">
+            <tr><td colspan="6" class="loading-cell">Loading error logs…</td></tr>
+          </tbody>
+        </table>
       </div>
     </section>
 

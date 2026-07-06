@@ -370,6 +370,8 @@
 }
 
 /* ── Duplicate warning ── */
+#lb-phone-dup { display: none; }
+#lb-phone-dup:not([hidden]) { display: block; }
 .lb-duplicate-warn {
   font-size: var(--text-sm);
   color: var(--saffron);
@@ -378,7 +380,6 @@
   border-radius: var(--radius);
   padding: var(--space-2) var(--space-3);
   margin-top: var(--space-2);
-  display: block;
 }
 
 /* ── Add member button ── */

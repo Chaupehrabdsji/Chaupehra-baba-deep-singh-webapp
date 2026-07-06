@@ -279,6 +279,17 @@
 
   const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
+  async function logError(source, message, details) {
+    try {
+      await sb.from('error_logs').insert([{
+        source, message,
+        details: details ?? null,
+        page_url: window.location.href,
+        user_agent: navigator.userAgent,
+      }]);
+    } catch { /* best-effort — never block the user on logging failure */ }
+  }
+
   const AGE_MAP = [
     { max: 6,   group: '6_under', label: '6 & under',  simran: 5500  },
     { max: 9,   group: '7_9',     label: '7–9 years',  simran: 7500  },
@@ -493,8 +504,10 @@
 
     const age = parseInt(ageInput.value);
     const { group } = getGroupForAge(age);
+    const signupId = crypto.randomUUID();
 
     const payload = {
+      id:              signupId,
       full_name:       document.getElementById('lb-name').value.trim(),
       age,
       age_group:       group,
@@ -508,9 +521,10 @@
       contact_consent: document.getElementById('lb-consent').checked,
     };
 
-    const { data: signup, error } = await sb.from('likhanbhagti_signups').insert([payload]).select('id').single();
+    const { error } = await sb.from('likhanbhagti_signups').insert([payload]);
 
     if (error) {
+      logError('likhanbhagti_signup', error.message, { code: error.code, hint: error.hint, payload });
       submitBtn.disabled = false;
       submitLbl.hidden   = false;
       spinner.hidden     = true;
@@ -525,9 +539,12 @@
       const ageEl  = card.querySelector(`[id$="-age"]`);
       const a = parseInt(ageEl.value);
       const { group: mg, simran: ms } = getGroupForAge(a);
-      members.push({ signup_id: signup.id, full_name: nameEl.value.trim(), age: a, age_group: mg, simran_times: ms });
+      members.push({ signup_id: signupId, full_name: nameEl.value.trim(), age: a, age_group: mg, simran_times: ms });
     });
-    if (members.length) await sb.from('likhanbhagti_members').insert(members);
+    if (members.length) {
+      const { error: memberErr } = await sb.from('likhanbhagti_members').insert(members);
+      if (memberErr) logError('likhanbhagti_signup_members', memberErr.message, { code: memberErr.code, signup_id: signupId, members });
+    }
 
     submitBtn.disabled = false;
     submitLbl.hidden   = false;

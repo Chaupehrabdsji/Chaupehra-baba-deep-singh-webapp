@@ -1,402 +1,515 @@
-import {
-  getAllEvents, upsertEvent, deleteEvent,
-  getPhotos, uploadPhoto, deletePhoto,
-  getAllBookings, updateBookingStatus,
-  getAllAvailableDates, setDateAvailability, removeDateEntry,
-  sb
-} from '../db.js';
+/* ============================================================
+   CHAUPEHRA ADMIN — Full Dashboard Logic
+   ============================================================ */
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { SUPABASE_URL, SUPABASE_ANON } from '../supabase-config.js';
 
-// ── Auth ──────────────────────────────────────────────────────────────────────
-const loginScreen = document.getElementById('loginScreen');
-const dashboard   = document.getElementById('dashboard');
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-sb.auth.getSession().then(({ data: { session } }) => {
-  session ? showDashboard() : showLogin();
-});
+/* ── Helpers ── */
+const $    = id => document.getElementById(id);
+const fmtD = d  => new Date(d + 'T00:00:00').toLocaleDateString('en-CA', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+const fmtT = t  => { if (!t) return ''; const [h, m] = t.split(':'); const d = new Date(); d.setHours(+h, +m); return d.toLocaleTimeString('en-CA', { hour: 'numeric', minute: '2-digit', hour12: true }); };
+const fmtTs= ts => new Date(ts).toLocaleDateString('en-CA', { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+const setStatus = (id, msg, type) => { const el = $(id); el.textContent = msg; el.className = 'form-status ' + (type || ''); };
 
-document.getElementById('loginForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  const btn = document.getElementById('loginBtn');
-  const err = document.getElementById('loginError');
-  btn.textContent = 'Signing in…'; btn.disabled = true; err.textContent = '';
-  const { error } = await sb.auth.signInWithPassword({
-    email:    document.getElementById('loginEmail').value,
-    password: document.getElementById('loginPassword').value,
+const REASON_LABELS = { volunteer: 'Volunteer', book_event: 'Book Event', donate: 'Donate', general: 'General Enquiry', other: 'Other' };
+
+/* ══════════════════════════════════════════════════
+   AUTH
+══════════════════════════════════════════════════ */
+async function initAuth() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) showDashboard();
+
+  sb.auth.onAuthStateChange((_, session) => {
+    if (session) showDashboard(); else showLogin();
   });
-  btn.textContent = 'Sign In'; btn.disabled = false;
-  if (error) { err.textContent = error.message; return; }
-  showDashboard();
-});
 
-document.getElementById('logoutBtn').addEventListener('click', async () => {
-  await sb.auth.signOut();
-  showLogin();
-});
-
-function showLogin()     { loginScreen.classList.remove('hidden'); dashboard.classList.add('hidden'); }
-function showDashboard() { loginScreen.classList.add('hidden'); dashboard.classList.remove('hidden'); loadTab('events'); }
-
-// ── Tabs ──────────────────────────────────────────────────────────────────────
-document.querySelectorAll('.nav-item').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    loadTab(btn.dataset.tab);
+  $('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = $('loginBtn');
+    btn.textContent = 'Signing in…'; btn.disabled = true;
+    const { error } = await sb.auth.signInWithPassword({
+      email:    $('loginEmail').value.trim(),
+      password: $('loginPassword').value,
+    });
+    if (error) {
+      $('loginError').textContent = error.message;
+      $('loginError').classList.remove('hidden');
+      btn.textContent = 'Sign In'; btn.disabled = false;
+    }
   });
-});
 
-function loadTab(name) {
-  document.querySelectorAll('.tab-panel').forEach(p => { p.classList.remove('active'); p.classList.add('hidden'); });
-  const panel = document.getElementById(`tab-${name}`);
-  panel.classList.remove('hidden');
-  panel.classList.add('active');
-  ({ events: loadEvents, gallery: loadGallery, bookings: loadBookings, dates: loadDates })[name]?.();
+  $('logoutBtn').addEventListener('click', () => sb.auth.signOut());
 }
 
-// ── EVENTS ────────────────────────────────────────────────────────────────────
-const eventForm   = document.getElementById('eventForm');
-const eventsBody  = document.getElementById('eventsBody');
-const eventStatus = document.getElementById('eventStatus');
-
-document.getElementById('addEventBtn').addEventListener('click', () => openEventForm());
-document.getElementById('cancelEventBtn').addEventListener('click', () => eventForm.classList.add('hidden'));
-document.getElementById('saveEventBtn').addEventListener('click', saveEvent);
-
-function openEventForm(event = null) {
-  document.getElementById('eventFormTitle').textContent = event ? 'Edit Event' : 'New Event';
-  document.getElementById('eventId').value        = event?.id ?? '';
-  document.getElementById('evTitle').value        = event?.title ?? '';
-  document.getElementById('evDate').value         = event?.date ?? '';
-  document.getElementById('evStart').value        = event?.time_start ?? '';
-  document.getElementById('evEnd').value          = event?.time_end ?? '';
-  document.getElementById('evVenue').value        = event?.venue ?? '';
-  document.getElementById('evDesc').value         = event?.description ?? '';
-  document.getElementById('evPublished').checked  = event?.is_published ?? true;
-  eventStatus.textContent = '';
-  eventForm.classList.remove('hidden');
-  eventForm.scrollIntoView({ behavior: 'smooth' });
+function showLogin() {
+  $('loginScreen').classList.remove('hidden');
+  $('dashboard').classList.add('hidden');
 }
 
-async function saveEvent() {
-  const id = document.getElementById('eventId').value;
+function showDashboard() {
+  $('loginScreen').classList.add('hidden');
+  $('dashboard').classList.remove('hidden');
+  loadTab('events');
+  loadInquiryBadge();
+  loadSignupsBadge();
+  loadErrorLogsBadge();
+}
+
+/* ══════════════════════════════════════════════════
+   TAB NAVIGATION
+══════════════════════════════════════════════════ */
+function loadTab(tab) {
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.tab-panel').forEach(p => {
+    const isActive = p.id === 'tab-' + tab;
+    p.classList.toggle('active', isActive);
+    p.classList.remove('hidden');
+  });
+  $('sidebar').classList.remove('open');
+  if (tab === 'events')    loadEvents();
+  if (tab === 'inquiries') loadInquiries();
+  if (tab === 'signups')   loadSignups();
+  if (tab === 'gallery')   loadGallery();
+  if (tab === 'errorlogs') loadErrorLogs();
+}
+
+document.querySelectorAll('.nav-item').forEach(btn => btn.addEventListener('click', () => loadTab(btn.dataset.tab)));
+$('sidebarToggle').addEventListener('click', () => $('sidebar').classList.toggle('open'));
+
+/* ══════════════════════════════════════════════════
+   EVENTS
+══════════════════════════════════════════════════ */
+let editingEventId = null;
+
+function showEventForm(ev = null) {
+  editingEventId = ev?.id || null;
+  $('eventFormTitle').textContent = ev ? 'Edit Event' : 'New Event';
+  $('evName').value         = ev?.name || '';
+  $('evDate').value         = ev?.date || '';
+  $('evEndDate').value      = ev?.end_date || '';
+  $('evStart').value        = ev?.start_time?.slice(0, 5) || '';
+  $('evEnd').value          = ev?.end_time?.slice(0, 5) || '';
+  $('evPath').value         = ev?.path_type || '';
+  $('evKirtani').value      = ev?.kirtani || '';
+  $('evNotes').value        = ev?.notes || '';
+  $('evGurpurab').checked   = ev?.is_gurpurab  || false;
+  $('evRecurring').checked  = ev?.is_recurring || false;
+  setStatus('eventStatus', '', '');
+  $('eventForm').classList.remove('hidden');
+  $('evName').focus();
+  $('eventForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function hideEventForm() {
+  $('eventForm').classList.add('hidden');
+  editingEventId = null;
+}
+
+$('addEventBtn').addEventListener('click', () => showEventForm());
+$('cancelEventBtn').addEventListener('click', hideEventForm);
+
+$('saveEventBtn').addEventListener('click', async () => {
+  const name = $('evName').value.trim();
+  const date = $('evDate').value;
+  if (!name) { setStatus('eventStatus', 'Event name is required.', 'error'); return; }
+  if (!date) { setStatus('eventStatus', 'Date is required.', 'error'); return; }
+
+  $('saveEventBtn').disabled = true;
+  setStatus('eventStatus', 'Saving…', '');
+
   const payload = {
-    ...(id ? { id } : {}),
-    title:        document.getElementById('evTitle').value.trim(),
-    date:         document.getElementById('evDate').value,
-    time_start:   document.getElementById('evStart').value || null,
-    time_end:     document.getElementById('evEnd').value || null,
-    venue:        document.getElementById('evVenue').value.trim() || null,
-    description:  document.getElementById('evDesc').value.trim() || null,
-    is_published: document.getElementById('evPublished').checked,
+    name,
+    date,
+    end_date:     $('evEndDate').value  || null,
+    start_time:   $('evStart').value    || null,
+    end_time:     $('evEnd').value      || null,
+    path_type:    $('evPath').value     || null,
+    kirtani:      $('evKirtani').value.trim()  || null,
+    notes:        $('evNotes').value.trim()    || null,
+    is_gurpurab:  $('evGurpurab').checked,
+    is_recurring: $('evRecurring').checked,
   };
-  if (!payload.title || !payload.date) {
-    showStatus(eventStatus, 'Title and date are required.', 'error'); return;
-  }
-  try {
-    showStatus(eventStatus, 'Saving…', '');
-    await upsertEvent(payload);
-    showStatus(eventStatus, 'Saved.', 'success');
-    eventForm.classList.add('hidden');
-    loadEvents();
-  } catch (e) { showStatus(eventStatus, e.message, 'error'); }
-}
+  if (editingEventId) payload.id = editingEventId;
+
+  const { error } = await sb.from('events').upsert(payload);
+  $('saveEventBtn').disabled = false;
+
+  if (error) { setStatus('eventStatus', 'Error: ' + error.message, 'error'); return; }
+  setStatus('eventStatus', 'Saved ✓', 'success');
+  setTimeout(hideEventForm, 900);
+  loadEvents();
+});
 
 async function loadEvents() {
-  eventsBody.innerHTML = '<tr><td colspan="5" class="loading">Loading…</td></tr>';
-  try {
-    const events = await getAllEvents();
-    if (!events.length) { eventsBody.innerHTML = '<tr><td colspan="5" class="loading">No events yet.</td></tr>'; return; }
-    eventsBody.innerHTML = events.map(ev => `
-      <tr>
-        <td>${formatDate(ev.date)}</td>
-        <td><strong>${ev.title}</strong>${ev.time_start ? `<br><small>${ev.time_start}${ev.time_end ? ' – ' + ev.time_end : ''}</small>` : ''}</td>
-        <td>${ev.venue ?? '—'}</td>
-        <td><span class="badge ${ev.is_published ? 'badge-published' : 'badge-draft'}">${ev.is_published ? 'Published' : 'Draft'}</span></td>
-        <td class="actions-cell">
-          <button class="btn-sm btn-edit" data-id="${ev.id}" data-action="edit-event">Edit</button>
-          <button class="btn-sm btn-delete" data-id="${ev.id}" data-action="delete-event">Delete</button>
-        </td>
-      </tr>`).join('');
-  } catch (e) { eventsBody.innerHTML = `<tr><td colspan="5" class="loading">${e.message}</td></tr>`; }
-}
-
-eventsBody.addEventListener('click', async e => {
-  const btn = e.target.closest('[data-action]');
-  if (!btn) return;
-  const { action, id } = btn.dataset;
-  if (action === 'edit-event') {
-    const events = await getAllEvents();
-    openEventForm(events.find(ev => ev.id === id));
-  } else if (action === 'delete-event') {
-    if (!confirm('Delete this event?')) return;
-    await deleteEvent(id);
-    loadEvents();
+  $('eventsBody').innerHTML = `<tr><td colspan="6" class="loading-cell">Loading…</td></tr>`;
+  const { data, error } = await sb.from('events').select('*').order('date', { ascending: false });
+  if (error || !data) {
+    $('eventsBody').innerHTML = `<tr><td colspan="6" class="loading-cell text-muted">Failed to load events.</td></tr>`;
+    return;
   }
-});
-
-// ── GALLERY ───────────────────────────────────────────────────────────────────
-const galleryGrid  = document.getElementById('galleryAdminGrid');
-const uploadStatus = document.getElementById('uploadStatus');
-let galleryPhotos  = [];
-
-document.getElementById('photoUpload').addEventListener('change', async e => {
-  const files = Array.from(e.target.files);
-  if (!files.length) return;
-  showUploadStatus(`Uploading ${files.length} photo(s)…`, 'progress');
-  for (const file of files) {
-    const caption = prompt(`Caption for "${file.name}" (optional):`) ?? '';
-    try { await uploadPhoto(file, caption); }
-    catch (err) { showUploadStatus(`Error: ${err.message}`, 'error'); return; }
+  if (!data.length) {
+    $('eventsBody').innerHTML = `<tr><td colspan="6" class="loading-cell text-muted">No events yet. Add one above.</td></tr>`;
+    return;
   }
-  showUploadStatus(`Uploaded ${files.length} photo(s).`, 'success');
-  e.target.value = '';
-  loadGallery();
-});
-
-async function loadGallery() {
-  galleryGrid.innerHTML = '<div class="loading">Loading…</div>';
-  try {
-    galleryPhotos = await getPhotos();
-    if (!galleryPhotos.length) { galleryGrid.innerHTML = '<div class="loading">No photos yet. Upload some above.</div>'; return; }
-    renderGallery();
-  } catch (e) { galleryGrid.innerHTML = `<div class="loading">${e.message}</div>`; }
-}
-
-function renderGallery() {
-  galleryGrid.innerHTML = galleryPhotos.map((p, i) => `
-    <div class="gallery-admin-item" draggable="true" data-id="${p.id}" data-index="${i}">
-      <img src="${p.url}" alt="${p.caption ?? ''}" loading="lazy" />
-      <div class="gallery-item-footer">
-        <span class="gallery-item-caption">${p.caption ?? 'No caption'}</span>
-        <div style="display:flex;gap:0.3rem">
-          <button class="btn-sm btn-edit" data-action="edit-caption" data-id="${p.id}" data-path="${p.storage_path}" title="Edit caption">✏️</button>
-          <button class="btn-sm btn-delete" data-action="delete-photo" data-id="${p.id}" data-path="${p.storage_path}" title="Delete">✕</button>
-        </div>
-      </div>
-    </div>`).join('');
-
-  setupDragReorder();
-}
-
-galleryGrid.addEventListener('click', async e => {
-  const btn = e.target.closest('[data-action]');
-  if (!btn) return;
-  const { action, id, path } = btn.dataset;
-
-  if (action === 'delete-photo') {
-    if (!confirm('Delete this photo?')) return;
-    await deletePhoto({ id, storage_path: path });
-    galleryPhotos = galleryPhotos.filter(p => p.id !== id);
-    renderGallery();
-  } else if (action === 'edit-caption') {
-    const photo = galleryPhotos.find(p => p.id === id);
-    const newCaption = prompt('Edit caption:', photo?.caption ?? '');
-    if (newCaption === null) return;
-    try {
-      await sb.from('photos').update({ caption: newCaption }).eq('id', id);
-      galleryPhotos = galleryPhotos.map(p => p.id === id ? { ...p, caption: newCaption } : p);
-      renderGallery();
-    } catch (err) { alert('Failed to update caption: ' + err.message); }
-  }
-});
-
-// ── Drag-to-reorder ───────────────────────────────────────────────────────────
-function setupDragReorder() {
-  const items = galleryGrid.querySelectorAll('.gallery-admin-item');
-  let dragSrc = null;
-
-  items.forEach(item => {
-    item.addEventListener('dragstart', e => {
-      dragSrc = item;
-      e.dataTransfer.effectAllowed = 'move';
-      item.classList.add('dragging');
-    });
-    item.addEventListener('dragend', () => {
-      item.classList.remove('dragging');
-      galleryGrid.querySelectorAll('.gallery-admin-item').forEach(i => i.classList.remove('drag-over'));
-    });
-    item.addEventListener('dragover', e => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      if (item !== dragSrc) {
-        galleryGrid.querySelectorAll('.gallery-admin-item').forEach(i => i.classList.remove('drag-over'));
-        item.classList.add('drag-over');
-      }
-    });
-    item.addEventListener('drop', async e => {
-      e.preventDefault();
-      if (!dragSrc || dragSrc === item) return;
-      const srcId  = dragSrc.dataset.id;
-      const destId = item.dataset.id;
-      const srcIdx  = galleryPhotos.findIndex(p => p.id === srcId);
-      const destIdx = galleryPhotos.findIndex(p => p.id === destId);
-      const reordered = [...galleryPhotos];
-      const [moved] = reordered.splice(srcIdx, 1);
-      reordered.splice(destIdx, 0, moved);
-      galleryPhotos = reordered;
-      renderGallery();
-      // Persist new order
-      await Promise.all(reordered.map((p, i) =>
-        sb.from('photos').update({ display_order: i }).eq('id', p.id)
-      ));
-    });
-  });
-}
-
-function showUploadStatus(msg, type) {
-  uploadStatus.textContent = msg;
-  uploadStatus.className = `upload-status upload-${type}`;
-}
-
-// ── BOOKINGS ──────────────────────────────────────────────────────────────────
-const bookingsBody  = document.getElementById('bookingsBody');
-const bookingFilter = document.getElementById('bookingFilter');
-let allBookings = [];
-
-bookingFilter.addEventListener('change', renderBookings);
-
-async function loadBookings() {
-  bookingsBody.innerHTML = '<tr><td colspan="6" class="loading">Loading…</td></tr>';
-  try {
-    allBookings = await getAllBookings();
-    renderBookings();
-  } catch (e) { bookingsBody.innerHTML = `<tr><td colspan="6" class="loading">${e.message}</td></tr>`; }
-}
-
-function renderBookings() {
-  const filter = bookingFilter.value;
-  const list = filter === 'all' ? allBookings : allBookings.filter(b => b.status === filter);
-  if (!list.length) { bookingsBody.innerHTML = '<tr><td colspan="6" class="loading">No bookings found.</td></tr>'; return; }
-  bookingsBody.innerHTML = list.map(b => `
+  $('eventsBody').innerHTML = data.map(ev => `
     <tr>
-      <td>${formatDate(b.event_date)}<br><small style="color:var(--text-sub)">${formatDateShort(b.created_at)}</small></td>
-      <td><strong>${b.name}</strong></td>
-      <td>${b.email}<br>${b.phone ?? ''}</td>
-      <td>${b.event_type ?? '—'}</td>
-      <td><span class="badge badge-${b.status}">${b.status}</span></td>
-      <td class="actions-cell">
-        ${b.status !== 'confirmed' ? `<button class="btn-sm btn-confirm" data-action="booking-status" data-id="${b.id}" data-status="confirmed">Confirm</button>` : ''}
-        ${b.status !== 'declined'  ? `<button class="btn-sm btn-decline" data-action="booking-status" data-id="${b.id}" data-status="declined">Decline</button>`   : ''}
-        ${b.status !== 'pending'   ? `<button class="btn-sm btn-pending" data-action="booking-status" data-id="${b.id}" data-status="pending">Pending</button>`     : ''}
-        ${b.message ? `<button class="btn-sm btn-edit" data-action="view-note" data-id="${b.id}">Note</button>` : ''}
+      <td>
+        ${fmtD(ev.date)}
+        ${ev.end_date && ev.end_date !== ev.date
+          ? `<br><span class="text-muted" style="font-size:0.75rem;">→ ${fmtD(ev.end_date)}</span>`
+          : ''}
+      </td>
+      <td>
+        <strong>${ev.name}</strong>
+        ${ev.is_gurpurab  ? ' <span class="pill pill-gurpurab">Gurpurab</span>' : ''}
+        ${ev.is_recurring ? ' <span class="pill pill-event">Recurring</span>' : ''}
+      </td>
+      <td>
+        ${ev.start_time ? fmtT(ev.start_time) : '<span class="text-muted">—</span>'}
+        ${ev.end_time   ? ' – ' + fmtT(ev.end_time) : ''}
+      </td>
+      <td>${[ev.path_type, ev.kirtani].filter(Boolean).join('<br>') || '<span class="text-muted">—</span>'}</td>
+      <td>${ev.is_gurpurab
+        ? '<span class="pill pill-gurpurab">Gurpurab</span>'
+        : '<span class="pill pill-event">Event</span>'}</td>
+      <td>
+        <div style="display:flex;gap:6px;">
+          <button class="btn-outline btn-sm" onclick="window._editEvent('${ev.id}')">Edit</button>
+          <button class="btn-danger btn-sm" onclick="window._deleteEvent('${ev.id}','${ev.name.replace(/'/g, "\\'")}')">Delete</button>
+        </div>
       </td>
     </tr>`).join('');
 }
 
-bookingsBody.addEventListener('click', async e => {
-  const btn = e.target.closest('[data-action]');
-  if (!btn) return;
-  const { action, id, status } = btn.dataset;
+window._editEvent = async id => {
+  const { data } = await sb.from('events').select('*').eq('id', id).single();
+  if (data) showEventForm(data);
+};
 
-  if (action === 'booking-status') {
-    await updateBookingStatus(id, status);
-    allBookings = allBookings.map(b => b.id === id ? { ...b, status } : b);
-    renderBookings();
-  } else if (action === 'view-note') {
-    const booking = allBookings.find(b => b.id === id);
-    if (!booking) return;
-    showBookingModal(booking);
-  }
-});
+window._deleteEvent = async (id, name) => {
+  if (!confirm(`Delete "${name}"?\n\nThis cannot be undone.`)) return;
+  const { error } = await sb.from('events').delete().eq('id', id);
+  if (error) alert('Error: ' + error.message);
+  else loadEvents();
+};
 
-// ── Booking detail modal ──────────────────────────────────────────────────────
-function showBookingModal(b) {
-  let modal = document.getElementById('bookingModal');
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = 'bookingModal';
-    modal.className = 'modal-overlay';
-    modal.innerHTML = `
-      <div class="modal-card">
-        <div class="modal-header">
-          <h3 id="modalTitle">Booking Details</h3>
-          <button class="modal-close" id="modalClose">✕</button>
+/* ══════════════════════════════════════════════════
+   INQUIRIES
+══════════════════════════════════════════════════ */
+async function loadSignupsBadge() {
+  const { count } = await sb.from('likhanbhagti_signups').select('*', { count: 'exact', head: true });
+  const badge = $('signups-badge');
+  if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); }
+  else badge.classList.add('hidden');
+}
+
+async function loadInquiryBadge() {
+  const { count } = await sb.from('inquiries')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'new');
+  const badge = $('inquiries-badge');
+  if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); }
+  else badge.classList.add('hidden');
+}
+
+async function loadInquiries() {
+  $('inquiriesList').innerHTML = `<div class="loading-cell">Loading…</div>`;
+
+  const statusFilter = $('inquiryFilter').value;
+  const reasonFilter = $('inquiryReason').value;
+
+  let q = sb.from('inquiries').select('*').order('created_at', { ascending: false });
+  if (statusFilter !== 'all') q = q.eq('status', statusFilter);
+  if (reasonFilter !== 'all') q = q.eq('reason', reasonFilter);
+
+  const { data, error } = await q;
+  if (error) { $('inquiriesList').innerHTML = `<div class="loading-cell text-muted">Failed to load.</div>`; return; }
+  if (!data.length) { $('inquiriesList').innerHTML = `<div class="loading-cell text-muted">No inquiries found.</div>`; return; }
+
+  $('inquiriesList').innerHTML = data.map(inq => `
+    <div class="inquiry-card status-${inq.status}" id="inq-${inq.id}">
+      <div class="inquiry-header">
+        <div>
+          <div class="inquiry-name">${inq.name}</div>
+          <div class="inquiry-reason">${REASON_LABELS[inq.reason] || inq.reason}</div>
         </div>
-        <div class="modal-body" id="modalBody"></div>
-      </div>`;
-    document.body.appendChild(modal);
-    document.getElementById('modalClose').addEventListener('click', () => modal.classList.add('hidden'));
-    modal.addEventListener('click', e => { if (e.target === modal) modal.classList.add('hidden'); });
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span class="pill pill-${inq.status}">${inq.status}</span>
+          <span class="inquiry-date">${fmtTs(inq.created_at)}</span>
+        </div>
+      </div>
+      <div class="inquiry-meta">
+        <span>📞 <a href="tel:${inq.phone}">${inq.phone}</a></span>
+        <span>✉️ <a href="mailto:${inq.email}">${inq.email}</a></span>
+      </div>
+      ${inq.preferred_date ? `<span class="inquiry-date-pref">📅 Preferred date: ${fmtD(inq.preferred_date)}</span>` : ''}
+      ${inq.comments ? `<div class="inquiry-comments">"${inq.comments}"</div>` : ''}
+      <div class="inquiry-actions">
+        <button class="btn-outline btn-sm" onclick="window._setInqStatus('${inq.id}','read')"
+          ${inq.status === 'read' ? 'disabled style="opacity:0.4"' : ''}>Mark Read</button>
+        <button class="btn-outline btn-sm" onclick="window._setInqStatus('${inq.id}','responded')"
+          ${inq.status === 'responded' ? 'disabled style="opacity:0.4"' : ''}>Mark Responded</button>
+        <button class="btn-danger btn-sm" onclick="window._deleteInq('${inq.id}')">Delete</button>
+        <a href="mailto:${inq.email}?subject=Re: Your Inquiry — Chaupehra Baba Deep Singh Ji&body=Waheguru Ji Ka Khalsa, Waheguru Ji Ki Fateh %0A%0ADear ${inq.name},"
+           class="btn-primary btn-sm" style="margin-left:auto;">Reply by Email</a>
+      </div>
+    </div>`).join('');
+}
+
+window._setInqStatus = async (id, status) => {
+  const { error } = await sb.from('inquiries').update({ status }).eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  loadInquiries();
+  loadInquiryBadge();
+};
+
+window._deleteInq = async id => {
+  if (!confirm('Delete this inquiry? This cannot be undone.')) return;
+  const { error } = await sb.from('inquiries').delete().eq('id', id);
+  if (error) alert('Error: ' + error.message);
+  else { loadInquiries(); loadInquiryBadge(); }
+};
+
+$('inquiryFilter').addEventListener('change', loadInquiries);
+$('inquiryReason').addEventListener('change', loadInquiries);
+
+/* ══════════════════════════════════════════════════
+   SIGNUPS
+══════════════════════════════════════════════════ */
+const AGE_GROUP_LABELS = {
+  '6_under': '6 & under', '7_9': '7–9 yrs', '9_12': '9–12 yrs',
+  '13_15': '13–15 yrs', '16_20': '16–20 yrs', '21_above': '21+',
+};
+
+let allSignups = [];
+
+async function loadSignups() {
+  $('signupsBody').innerHTML = `<tr><td colspan="9" class="loading-cell">Loading…</td></tr>`;
+  const { data, error } = await sb
+    .from('likhanbhagti_signups')
+    .select('*, likhanbhagti_members(*)')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    $('signupsBody').innerHTML = `<tr><td colspan="9" class="loading-cell text-muted">Failed to load: ${error.message}</td></tr>`;
+    return;
   }
 
-  document.getElementById('modalBody').innerHTML = `
-    <dl class="booking-detail">
-      <dt>Name</dt><dd>${b.name}</dd>
-      <dt>Email</dt><dd>${b.email}</dd>
-      <dt>Phone</dt><dd>${b.phone ?? '—'}</dd>
-      <dt>Date Requested</dt><dd>${formatDate(b.event_date)}</dd>
-      <dt>Event Type</dt><dd>${b.event_type ?? '—'}</dd>
-      <dt>Status</dt><dd><span class="badge badge-${b.status}">${b.status}</span></dd>
-      <dt>Submitted</dt><dd>${formatDateShort(b.created_at)}</dd>
-      <dt>Message</dt><dd style="white-space:pre-wrap">${b.message ?? '—'}</dd>
-    </dl>`;
-  modal.classList.remove('hidden');
+  allSignups = data || [];
+  const badge = $('signups-badge');
+  if (allSignups.length) { badge.textContent = allSignups.length; badge.classList.remove('hidden'); }
+  else badge.classList.add('hidden');
+
+  renderSignups();
 }
 
-// ── AVAILABLE DATES ───────────────────────────────────────────────────────────
-const datesBody  = document.getElementById('datesBody');
-const dateStatus = document.getElementById('dateStatus');
+function renderSignups() {
+  const search    = $('signupSearch').value.toLowerCase();
+  const ageFilter = $('signupAgeFilter').value;
 
-document.getElementById('saveDateBtn').addEventListener('click', async () => {
-  const date  = document.getElementById('newDate').value;
-  const avail = document.getElementById('dateAvail').value === 'true';
-  const notes = document.getElementById('dateNotes').value.trim();
-  if (!date) { showStatus(dateStatus, 'Please select a date.', 'error'); return; }
-  try {
-    showStatus(dateStatus, 'Saving…', '');
-    await setDateAvailability(date, avail, notes);
-    showStatus(dateStatus, 'Date saved.', 'success');
-    document.getElementById('newDate').value   = '';
-    document.getElementById('dateNotes').value = '';
-    loadDates();
-  } catch (e) { showStatus(dateStatus, e.message, 'error'); }
-});
+  const filtered = allSignups.filter(s => {
+    const matchAge  = ageFilter === 'all' || s.age_group === ageFilter;
+    const matchText = !search || [s.full_name, s.phone, s.email, s.city, s.province, s.country]
+      .filter(Boolean).some(v => v.toLowerCase().includes(search));
+    return matchAge && matchText;
+  });
 
-async function loadDates() {
-  datesBody.innerHTML = '<tr><td colspan="4" class="loading">Loading…</td></tr>';
-  try {
-    const dates = await getAllAvailableDates();
-    if (!dates.length) { datesBody.innerHTML = '<tr><td colspan="4" class="loading">No dates set yet.</td></tr>'; return; }
-    datesBody.innerHTML = dates.map(d => `
-      <tr>
-        <td>${formatDate(d.date)}</td>
-        <td><span class="badge ${d.is_available ? 'badge-available' : 'badge-blocked'}">${d.is_available ? 'Available' : 'Blocked'}</span></td>
-        <td>${d.notes ?? '—'}</td>
-        <td><button class="btn-sm btn-delete" data-action="remove-date" data-id="${d.id}">Remove</button></td>
+  $('signupsCount').textContent = `Showing ${filtered.length} of ${allSignups.length} registrations`;
+
+  if (!filtered.length) {
+    $('signupsBody').innerHTML = `<tr><td colspan="9" class="loading-cell text-muted">No signups found.</td></tr>`;
+    return;
+  }
+
+  $('signupsBody').innerHTML = filtered.map((s, i) => {
+    const members = s.likhanbhagti_members || [];
+    const memberRows = members.map(m => `
+      <tr style="background:rgba(255,153,51,0.04);font-size:0.82rem;">
+        <td></td>
+        <td style="padding-left:2rem;color:var(--saffron);">↳ ${m.full_name}</td>
+        <td>${m.age ?? '—'} / ${AGE_GROUP_LABELS[m.age_group] || m.age_group || '—'}</td>
+        <td>${m.simran_times?.toLocaleString() ?? '—'}</td>
+        <td colspan="5" class="text-muted">family member</td>
       </tr>`).join('');
-  } catch (e) { datesBody.innerHTML = `<tr><td colspan="4" class="loading">${e.message}</td></tr>`; }
+
+    return `
+      <tr>
+        <td class="text-muted">${i + 1}</td>
+        <td>
+          <strong>${s.full_name}</strong>
+          ${s.parent_name ? `<br><span class="text-muted" style="font-size:0.75rem;">Guardian: ${s.parent_name}</span>` : ''}
+        </td>
+        <td>${s.age ?? '—'} / ${AGE_GROUP_LABELS[s.age_group] || s.age_group || '—'}</td>
+        <td>${s.simran_times?.toLocaleString() ?? '—'}</td>
+        <td><a href="tel:${s.phone}">${s.phone}</a></td>
+        <td><a href="mailto:${s.email}">${s.email || '—'}</a></td>
+        <td>${[s.city, s.province, s.country].filter(Boolean).join(', ') || '—'}</td>
+        <td style="white-space:nowrap;">${fmtTs(s.created_at)}</td>
+        <td>${members.length ? `<span class="pill pill-event">+${members.length}</span>` : '<span class="text-muted">—</span>'}</td>
+      </tr>
+      ${memberRows}`;
+  }).join('');
 }
 
-datesBody.addEventListener('click', async e => {
-  const btn = e.target.closest('[data-action="remove-date"]');
-  if (!btn) return;
-  if (!confirm('Remove this date entry?')) return;
-  await removeDateEntry(btn.dataset.id);
-  loadDates();
+function exportSignupsCSV() {
+  const headers = ['#','Full Name','Age','Age Group','Simran Target','Parent/Guardian','Phone','Email','City','Province','Country','Consent','Registered','Family Members'];
+  const rows = allSignups.map((s, i) => [
+    i + 1, s.full_name, s.age ?? '', AGE_GROUP_LABELS[s.age_group] || s.age_group || '',
+    s.simran_times ?? '', s.parent_name ?? '', s.phone, s.email ?? '',
+    s.city ?? '', s.province ?? '', s.country ?? '',
+    s.contact_consent ? 'Yes' : 'No',
+    new Date(s.created_at).toLocaleDateString('en-CA'),
+    (s.likhanbhagti_members || []).map(m => `${m.full_name} (${m.age})`).join('; '),
+  ].map(v => `"${String(v).replace(/"/g, '""')}"`));
+
+  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `lb-signups-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+$('signupSearch').addEventListener('input', renderSignups);
+$('signupAgeFilter').addEventListener('change', renderSignups);
+$('signupExportBtn').addEventListener('click', exportSignupsCSV);
+
+/* ══════════════════════════════════════════════════
+   GALLERY
+══════════════════════════════════════════════════ */
+async function loadGallery() {
+  $('galleryAdminGrid').innerHTML = `<div class="loading-cell">Loading…</div>`;
+  const { data, error } = await sb.from('photos').select('*').order('sort_order').order('created_at');
+  if (error) { $('galleryAdminGrid').innerHTML = `<div class="loading-cell text-muted">Failed to load.</div>`; return; }
+  if (!data.length) { $('galleryAdminGrid').innerHTML = `<div class="loading-cell text-muted">No photos yet. Upload some above.</div>`; return; }
+
+  $('galleryAdminGrid').innerHTML = data.map(p => {
+    const url = p.url || sb.storage.from('gallery').getPublicUrl(p.storage_path).data.publicUrl;
+    return `
+      <div class="gallery-photo-item" id="photo-${p.id}">
+        <img src="${url}" alt="" loading="lazy" />
+        <button class="gallery-photo-delete"
+          onclick="window._deletePhoto('${p.id}','${(p.storage_path||'').replace(/'/g,"\\'")}')"
+          aria-label="Delete photo" title="Delete">✕</button>
+      </div>`;
+  }).join('');
+}
+
+$('photoUpload').addEventListener('change', async e => {
+  const files = Array.from(e.target.files);
+  if (!files.length) return;
+
+  const progress = $('uploadProgress');
+  const fill     = $('progressFill');
+  const status   = $('uploadStatus');
+  progress.classList.remove('hidden');
+
+  let done = 0;
+  for (const file of files) {
+    status.textContent = `Uploading ${file.name}… (${done + 1} of ${files.length})`;
+    fill.style.width   = (done / files.length * 100) + '%';
+
+    const ext  = file.name.split('.').pop().toLowerCase();
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+    const { error: upErr } = await sb.storage.from('gallery').upload(path, file);
+    if (upErr) { status.textContent = `Error: ${upErr.message}`; continue; }
+
+    const { data: { publicUrl } } = sb.storage.from('gallery').getPublicUrl(path);
+    await sb.from('photos').insert({ url: publicUrl, storage_path: path, sort_order: 0 });
+    done++;
+  }
+
+  fill.style.width    = '100%';
+  status.textContent  = `✓ ${done} of ${files.length} photo${files.length > 1 ? 's' : ''} uploaded.`;
+  setTimeout(() => { progress.classList.add('hidden'); fill.style.width = '0%'; }, 3500);
+  e.target.value = '';
+  loadGallery();
 });
 
-// ── Mobile sidebar toggle ─────────────────────────────────────────────────────
-const sidebarToggle = document.createElement('button');
-sidebarToggle.className = 'sidebar-toggle';
-sidebarToggle.innerHTML = '☰';
-sidebarToggle.setAttribute('aria-label', 'Toggle sidebar');
-dashboard.querySelector('.main-content').prepend(sidebarToggle);
+window._deletePhoto = async (id, storagePath) => {
+  if (!confirm('Delete this photo? This cannot be undone.')) return;
+  if (storagePath) await sb.storage.from('gallery').remove([storagePath]);
+  const { error } = await sb.from('photos').delete().eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  const el = $('photo-' + id);
+  if (el) el.remove();
+};
 
-sidebarToggle.addEventListener('click', () => {
-  dashboard.querySelector('.sidebar').classList.toggle('sidebar-open');
+/* ══════════════════════════════════════════════════
+   ERROR LOGS
+══════════════════════════════════════════════════ */
+let allErrorLogs = [];
+
+async function loadErrorLogsBadge() {
+  const { count } = await sb.from('error_logs').select('*', { count: 'exact', head: true });
+  const badge = $('errorlogs-badge');
+  if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); }
+  else badge.classList.add('hidden');
+}
+
+async function loadErrorLogs() {
+  $('errorLogsBody').innerHTML = `<tr><td colspan="6" class="loading-cell">Loading error logs…</td></tr>`;
+  const { data, error } = await sb.from('error_logs').select('*').order('created_at', { ascending: false }).limit(500);
+
+  if (error) {
+    $('errorLogsBody').innerHTML = `<tr><td colspan="6" class="loading-cell text-muted">Failed to load: ${error.message}</td></tr>`;
+    return;
+  }
+
+  allErrorLogs = data;
+
+  const sources = [...new Set(data.map(l => l.source))].sort();
+  const filterEl = $('errorSourceFilter');
+  const prevValue = filterEl.value;
+  filterEl.innerHTML = `<option value="all">All Sources</option>` +
+    sources.map(s => `<option value="${s}">${s}</option>`).join('');
+  filterEl.value = sources.includes(prevValue) ? prevValue : 'all';
+
+  renderErrorLogs();
+}
+
+function renderErrorLogs() {
+  const filter = $('errorSourceFilter').value;
+  const rows = filter === 'all' ? allErrorLogs : allErrorLogs.filter(l => l.source === filter);
+
+  if (!rows.length) {
+    $('errorLogsBody').innerHTML = `<tr><td colspan="6" class="loading-cell text-muted">No error logs found.</td></tr>`;
+    return;
+  }
+
+  $('errorLogsBody').innerHTML = rows.map(log => `
+    <tr>
+      <td>${fmtTs(log.created_at)}</td>
+      <td><span class="pill">${log.source}</span></td>
+      <td>${log.message}</td>
+      <td>${log.details ? `<code style="font-size:0.75rem;">${JSON.stringify(log.details).slice(0, 200)}</code>` : ''}</td>
+      <td class="text-muted" style="font-size:0.8rem;">${log.page_url || ''}</td>
+      <td><button class="btn-danger btn-sm" onclick="window._deleteErrorLog('${log.id}')">Delete</button></td>
+    </tr>`).join('');
+}
+
+window._deleteErrorLog = async id => {
+  const { error } = await sb.from('error_logs').delete().eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  loadErrorLogs();
+  loadErrorLogsBadge();
+};
+
+$('errorSourceFilter').addEventListener('change', renderErrorLogs);
+
+$('errorClearBtn').addEventListener('click', async () => {
+  if (!confirm('Delete ALL error logs? This cannot be undone.')) return;
+  const { error } = await sb.from('error_logs').delete().not('id', 'is', null);
+  if (error) { alert('Error: ' + error.message); return; }
+  loadErrorLogs();
+  loadErrorLogsBadge();
 });
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-function showStatus(el, msg, type) {
-  el.textContent = msg;
-  el.className = `form-status${type ? ' ' + type : ''}`;
-}
-
-function formatDate(dateStr) {
-  if (!dateStr) return '—';
-  return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' });
-}
-
-function formatDateShort(isoStr) {
-  return new Date(isoStr).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
-}
+/* ══════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════ */
+initAuth();
