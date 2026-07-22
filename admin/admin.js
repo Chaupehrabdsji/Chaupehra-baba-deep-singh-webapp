@@ -377,6 +377,73 @@ $('signupSearch').addEventListener('input', renderSignups);
 $('signupAgeFilter').addEventListener('change', renderSignups);
 $('signupExportBtn').addEventListener('click', exportSignupsCSV);
 
+/* ── Duplicate detection ── */
+const normPhone = p => (p || '').replace(/[^\d]/g, '').replace(/^1(?=\d{10}$)/, '');
+const normName  = n => (n || '').trim().toLowerCase().replace(/\s+/g, ' ');
+
+function findDuplicateGroups() {
+  const byPhone = new Map();
+  const byName  = new Map();
+  allSignups.forEach(s => {
+    const p = normPhone(s.phone);
+    const n = normName(s.full_name);
+    if (p) { if (!byPhone.has(p)) byPhone.set(p, []); byPhone.get(p).push(s); }
+    if (n) { if (!byName.has(n))  byName.set(n, []);  byName.get(n).push(s); }
+  });
+
+  const groups = [];
+  const seen = new Set();
+  byPhone.forEach((rows) => {
+    if (rows.length > 1) { groups.push({ reason: 'Same phone number', rows }); rows.forEach(r => seen.add(r.id)); }
+  });
+  byName.forEach((rows) => {
+    if (rows.length > 1 && !rows.every(r => seen.has(r.id))) {
+      groups.push({ reason: 'Same name', rows });
+    }
+  });
+  return groups;
+}
+
+function renderDuplicates() {
+  const groups = findDuplicateGroups();
+  const listEl = $('duplicatesList');
+  $('duplicatesPanelTitle').textContent = groups.length
+    ? `Possible Duplicates (${groups.length} group${groups.length > 1 ? 's' : ''})`
+    : 'Possible Duplicates';
+
+  if (!groups.length) {
+    listEl.innerHTML = `<p class="text-muted">No duplicate phone numbers or names found.</p>`;
+    return;
+  }
+
+  listEl.innerHTML = groups.map((g, gi) => `
+    <div class="dup-group" style="border:1px solid var(--navy-light,#333);border-radius:var(--radius);padding:var(--space-4);margin-bottom:var(--space-3);">
+      <div style="font-size:0.8rem;font-weight:700;color:var(--saffron);margin-bottom:var(--space-2);">${g.reason} — ${g.rows.length} entries</div>
+      ${g.rows.map(r => `
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);padding:var(--space-2) 0;border-top:1px solid rgba(255,255,255,0.06);">
+          <div style="font-size:0.85rem;">
+            <strong>${r.full_name}</strong>
+            <span class="text-muted"> · ${r.phone} · ${r.email || 'no email'} · registered ${fmtTs(r.created_at)}</span>
+          </div>
+          <button class="btn-danger btn-sm" onclick="window._deleteDupSignup('${r.id}', ${gi})">Delete this one</button>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+window._deleteDupSignup = async (id) => {
+  if (!confirm('Delete this signup entry? This cannot be undone.')) return;
+  const { error } = await sb.from('likhanbhagti_signups').delete().eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  await loadSignups();
+  renderDuplicates();
+};
+
+$('signupDuplicatesBtn').addEventListener('click', () => {
+  const panel = $('duplicatesPanel');
+  const hidden = panel.classList.toggle('hidden');
+  if (!hidden) renderDuplicates();
+});
+
 /* ══════════════════════════════════════════════════
    GALLERY
 ══════════════════════════════════════════════════ */

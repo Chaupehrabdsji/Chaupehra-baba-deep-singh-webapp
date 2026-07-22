@@ -241,9 +241,16 @@
             <option value="16_20">16–20 years</option>
             <option value="21_above">21 &amp; above</option>
           </select>
+          <button class="btn-outline" id="signupDuplicatesBtn">⚠ Check Duplicates</button>
           <button class="btn-outline" id="signupExportBtn">⬇ Export CSV</button>
         </div>
       </div>
+
+      <div class="form-card hidden" id="duplicatesPanel">
+        <h3 id="duplicatesPanelTitle">Possible Duplicates</h3>
+        <div id="duplicatesList"></div>
+      </div>
+
       <div class="table-wrap">
         <table class="data-table" id="signupsTable">
           <thead>
