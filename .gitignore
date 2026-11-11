@@ -1,7 +1,5 @@
 .vercel
-supabase-config.js
 .DS_Store
-*.png
 graphify-out/
 netlify.toml
 supabase/.temp/
